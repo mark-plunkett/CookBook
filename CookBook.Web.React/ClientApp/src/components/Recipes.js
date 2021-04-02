@@ -1,4 +1,6 @@
 import React, { Component } from 'react';
+import { Link } from 'react-router-dom';
+import { getRecipes } from '../models/recipes';
 
 export class Recipes extends Component {
     static displayName = Recipes.name;
@@ -40,14 +42,14 @@ export class Recipes extends Component {
             <div>
                 <h1 id="tabelLabel" >Recipes</h1>
                 <p>This component demonstrates fetching data from the server.</p>
+                <Link to="/recipes/create">Create Recipe</Link>
                 {contents}
             </div>
         );
     }
 
     async fetchRecipes() {
-        const response = await fetch('api/recipes');
-        const data = await response.json();
+        const data = await getRecipes();
         this.setState({ recipes: data, loading: false });
     }
 }

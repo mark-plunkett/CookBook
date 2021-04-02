@@ -1,4 +1,5 @@
-﻿using CookBook.Model.Events;
+﻿using CookBook.Model.Commands;
+using CookBook.Model.Events;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -24,24 +25,29 @@ namespace CookBook.Model
             }
         }
 
-        public void Create(
-            string title,
-            string description,
-            string instructions,
-            string ingredients,
-            int servings)
+        public void Create(CreateRecipeCommand command)
         {
             if (base.Version >= 0)
                 throw new InvalidOperationException("Already created");
 
-            if (string.IsNullOrWhiteSpace(title))
-                throw new ArgumentNullException(nameof(title));
+            if (string.IsNullOrWhiteSpace(command.Title))
+                throw new ArgumentNullException(nameof(command.Title));
 
-            base.Apply(new RecipeCreated(base.ID, title, description, instructions, ingredients, servings));
+            if (command.Servings < 1)
+                throw new ArgumentOutOfRangeException(nameof(command.Servings));
+
+            base.Apply(new RecipeCreated(
+                Guid.NewGuid(),
+                command.Title,
+                command.Description,
+                command.Instructions,
+                command.Ingredients,
+                command.Servings));
         }
 
         private void OnCreated(RecipeCreated e)
         {
+            base.ID = e.RecipeID;
             this.Title = e.Title;
             this.Description = e.Description;
             this.Instructions = e.Instructions;

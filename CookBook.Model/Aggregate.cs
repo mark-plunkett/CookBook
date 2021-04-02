@@ -30,6 +30,6 @@ namespace CookBook.Model
             }
         }
 
-        public IEvent[] GetChanges() => _changes.ToArray();
+        public IEnumerable<IEvent> GetChanges() => _changes.ToArray();
     }
 }

@@ -1,6 +1,6 @@
 {
-  "short_name": "CookBook.Web.React",
-  "name": "CookBook.Web.React",
+  "short_name": "CookBook",
+  "name": "CookBook",
   "icons": [
     {
       "src": "favicon.ico",

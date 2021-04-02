@@ -82,9 +82,11 @@ namespace CookBook.Web.React
                 //.UseConsoleLogger()
                 .SetHeartbeatTimeout(TimeSpan.FromSeconds(60))
                 .SetHeartbeatInterval(TimeSpan.FromSeconds(30));
-            var connection = EventStoreConnection.Create("ConnectTo=tcp://admin:changeit@localhost:1113;UseSslConnection=false;", connectionSettings);
+            var connection = EventStoreConnection.Create(
+                "ConnectTo=tcp://admin:changeit@localhost:1113;UseSslConnection=false;",
+                connectionSettings);
             connection.ConnectAsync().GetAwaiter().GetResult();
-            services.AddSingleton(connection);
+            services.AddSingleton<IEventStoreConnection>(s => connection);
         }
     }
 }

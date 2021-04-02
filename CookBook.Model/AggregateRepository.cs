@@ -10,11 +10,11 @@ namespace CookBook.Model
 {
     public class AggregateRepository
     {
-        private readonly IEventStoreConnection _eventStore;
+        private readonly IEventStoreConnection eventStore;
 
         public AggregateRepository(IEventStoreConnection eventStore)
         {
-            _eventStore = eventStore;
+            this.eventStore = eventStore;
         }
 
         public async Task SaveAsync<T>(T aggregate) where T : Aggregate, new()
@@ -24,7 +24,7 @@ namespace CookBook.Model
                     Guid.NewGuid(),
                     @event.GetType().Name,
                     true,
-                    Encoding.UTF8.GetBytes(JsonSerializer.Serialize(@event)),
+                    Encoding.UTF8.GetBytes(JsonSerializer.Serialize((object)@event)),
                     Encoding.UTF8.GetBytes(@event.GetType().FullName)))
                 .ToArray();
 
@@ -35,7 +35,7 @@ namespace CookBook.Model
 
             var streamName = GetStreamName(aggregate, aggregate.ID);
 
-            var result = await _eventStore.AppendToStreamAsync(streamName, ExpectedVersion.Any, events);
+            var result = await eventStore.AppendToStreamAsync(streamName, ExpectedVersion.Any, events);
         }
 
         public async Task<T> LoadAsync<T>(Guid aggregateId) where T : Aggregate, new()
@@ -50,14 +50,14 @@ namespace CookBook.Model
 
             do
             {
-                var page = await _eventStore.ReadStreamEventsForwardAsync(streamName, nextPageStart, 4096, false);
+                var page = await eventStore.ReadStreamEventsForwardAsync(streamName, nextPageStart, 4096, false);
 
                 if (page.Events.Length > 0)
                 {
                     aggregate.Load(
                         page.Events.Last().Event.EventNumber,
                         page.Events
-                            .Select(@event => JsonSerializer.Deserialize(Encoding.UTF8.GetString(@event.OriginalEvent.Data), Type.GetType(Encoding.UTF8.GetString(@event.OriginalEvent.Metadata))))
+                            .Select(e => JsonSerializer.Deserialize(Encoding.UTF8.GetString(e.OriginalEvent.Data), Type.GetType(Encoding.UTF8.GetString(e.OriginalEvent.Metadata))))
                             .Cast<IEvent>()
                             .ToArray());
                 }
