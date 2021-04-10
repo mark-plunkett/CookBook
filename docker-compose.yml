@@ -22,7 +22,21 @@ services:
       - type: volume
         source: eventstore-volume-logs
         target: /var/log/eventstore
-  
+  ravendb.db:
+    image: ravendb/ravendb:latest
+    ports:
+      - "8080:8080"
+      - "38888:38888"
+    environment: 
+      - RAVEN_Setup_Mode=None
+      - RAVEN_License_Eula_Accepted=true
+      - RAVEN_Security_UnsecuredAccessAllowed=PrivateNetwork
+    volumes:
+      - type: volume
+        source: ravendb-volume-data
+        target: /var/lib/ravendb
+
 volumes:
   eventstore-volume-data:
   eventstore-volume-logs:
+  ravendb-volume-data:

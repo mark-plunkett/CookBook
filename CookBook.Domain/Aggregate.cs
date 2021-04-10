@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 
-namespace CookBook.Model
+namespace CookBook.Domain
 {
     public abstract class Aggregate
     {
@@ -10,6 +11,8 @@ namespace CookBook.Model
 
         public Guid ID { get; protected set; } = Guid.Empty;
         public long Version { get; private set; } = -1;
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        public string Id => $"{this.GetType().Name}-{this.ID}";
 
         protected abstract void When(IEvent @event);
 

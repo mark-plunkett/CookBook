@@ -6,9 +6,9 @@ using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
 
-namespace CookBook.Model
+namespace CookBook.Domain
 {
-    public class AggregateRepository
+    public class AggregateRepository : IAggregateRepository
     {
         private readonly IEventStoreConnection eventStore;
 

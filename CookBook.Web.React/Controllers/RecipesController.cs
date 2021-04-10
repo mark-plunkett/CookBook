@@ -1,7 +1,11 @@
-﻿using CookBook.Model;
-using CookBook.Model.Commands;
+﻿using CookBook.Domain;
+using CookBook.Domain.Commands;
+using CookBook.Domain.Projections;
+using CookBook.Domain.Projections.RecipeList;
 using EventStore.ClientAPI;
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using Raven.Client.Documents;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,42 +18,50 @@ namespace CookBook.Web.React.Controllers
     [Route("api/[controller]")]
     public class RecipesController : ControllerBase
     {
-        private readonly AggregateRepository aggregateRepository;
-        private readonly IEventStoreConnection eventStoreConnection;
+        private readonly IMediator mediator;
+        private readonly IDocumentStore documentStore;
 
         public RecipesController(
-            AggregateRepository aggregateRepository,
-            IEventStoreConnection eventStoreConnection)
+            IMediator mediator,
+            IDocumentStore documentStore)
         {
-            this.aggregateRepository = aggregateRepository;
-            this.eventStoreConnection = eventStoreConnection;
+            this.mediator = mediator;
+            this.documentStore = documentStore;
         }
 
         [HttpGet]
-        public async Task<IEnumerable<RecipeDto>> List()
+        public async Task<IEnumerable<RecipeListDto>> List()
         {
-
-            return Enumerable.Empty<RecipeDto>();
+            return await this.mediator.Send(new RecipeListRequest());
         }
 
-        static string AccountIDToString(Guid id) => $"account-{id}";
-        async Task ReadAll(string streamName)
+        [HttpGet("raven")]
+        public async Task<RecipeListDto> Raven()
         {
-            Console.WriteLine(nameof(ReadAll));
-            var events = await this.eventStoreConnection.ReadStreamEventsForwardAsync(streamName, StreamPosition.Start, 4096, resolveLinkTos: false);
-            foreach (var e in events.Events)
-                Console.WriteLine($"{e.Event.EventType} {Encoding.UTF8.GetString(e.Event.Data.ToArray())}");
+            var id = Guid.NewGuid();
+            using (var session = this.documentStore.OpenSession())
+            {
+                var listDto = new RecipeListDto
+                {
+                    Id = id.ToString(),
+                    Title = "Recipe " + DateTime.UtcNow.ToString()
+                };
 
-            Console.WriteLine();
+                session.Store(listDto);
+
+                session.SaveChanges();
+            }
+
+            using (var session = this.documentStore.OpenSession())
+            {
+                return session.Load<RecipeListDto>(id.ToString());
+            }
         }
 
         [HttpPost("create")]
         public async Task<IActionResult> Create(CreateRecipeCommand command)
         {
-            var id = Guid.NewGuid();
-            var agg = await this.aggregateRepository.LoadAsync<Recipe>(id);
-            agg.Create(command);
-            await this.aggregateRepository.SaveAsync(agg);
+            await this.mediator.Send(command);
             return Ok();
         }
     }

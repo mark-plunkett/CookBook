@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace CookBook.Model.Events
+namespace CookBook.Domain.Events
 {
     public record RecipeCreated(
         Guid RecipeID,

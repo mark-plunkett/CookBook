@@ -1,12 +1,12 @@
-﻿using CookBook.Model.Commands;
-using CookBook.Model.Events;
+﻿using CookBook.Domain.Commands;
+using CookBook.Domain.Events;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace CookBook.Model
+namespace CookBook.Domain
 {
     public class Recipe : Aggregate
     {

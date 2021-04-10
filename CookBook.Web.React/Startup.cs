@@ -1,5 +1,7 @@
-using CookBook.Model;
+using CookBook.Domain;
 using EventStore.ClientAPI;
+using MediatR;
+using MediatR.Pipeline;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -7,6 +9,8 @@ using Microsoft.AspNetCore.SpaServices.ReactDevelopmentServer;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Raven.Client.Documents;
+using Raven.Client.Documents.Session;
 using System;
 
 namespace CookBook.Web.React
@@ -26,7 +30,13 @@ namespace CookBook.Web.React
             services.AddControllersWithViews();
 
             ConfigureEventStore(services);
-            services.AddTransient<AggregateRepository>();
+            services.AddTransient<IAggregateRepository, AggregateRepository>();
+
+            ConfigureRavenDB(services);
+
+            ConfigureMediatR(services);
+
+            services.AddHostedService<RecipeEventSubscriptionProcessor>();
 
             // In production, the React files will be served from this directory
             services.AddSpaStaticFiles(configuration =>
@@ -86,7 +96,32 @@ namespace CookBook.Web.React
                 "ConnectTo=tcp://admin:changeit@localhost:1113;UseSslConnection=false;",
                 connectionSettings);
             connection.ConnectAsync().GetAwaiter().GetResult();
-            services.AddSingleton<IEventStoreConnection>(s => connection);
+            services.AddSingleton(connection);
+        }
+
+        private void ConfigureMediatR(IServiceCollection services)
+        {
+            var assemblies = new[] { typeof(Startup).Assembly, typeof(IEvent).Assembly };
+            services.AddMediatR(assemblies);
+        }
+
+        private void ConfigureRavenDB(IServiceCollection services)
+        {
+            IDocumentStore store = new DocumentStore
+            {
+                Urls = new[]                        // URL to the Server,
+                {                                   // or list of URLs 
+                    "http://localhost:8080"  // to all Cluster Servers (Nodes)
+                },
+                Database = "cookbook",             // Default database that DocumentStore will interact with
+                Conventions = { }                   // DocumentStore customizations
+            };
+
+            store.Initialize();
+
+            services.AddSingleton(store);
+
+            services.AddScoped(s => store.OpenAsyncSession());
         }
     }
 }
