@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import { Button, Form } from 'react-bulma-components';
-import { getRecipes } from '../models/recipes';
+import { recipeStore } from '../models/recipes';
 
 export class Recipes extends Component {
     static displayName = Recipes.name;
@@ -9,10 +9,12 @@ export class Recipes extends Component {
     constructor(props) {
         super(props);
         this.state = { recipes: [], loading: true };
+        this.setState = this.setState.bind(this)
     }
 
     componentDidMount() {
-        this.fetchRecipes();
+        recipeStore.subscribe(this.setState);
+        recipeStore.init(this.setState);
     }
 
     static renderRecipesTable(recipes) {
@@ -42,15 +44,9 @@ export class Recipes extends Component {
         return (
             <div>
                 <h1 id="tabelLabel">Recipes</h1>
-                <p>Delicious recipes...</p>
                 <Button to="/recipes/create" renderAs={Link} className="is-link">Create Recipe</Button>
                 {contents}
             </div>
         );
-    }
-
-    async fetchRecipes() {
-        const data = await getRecipes();
-        this.setState({ recipes: data, loading: false });
     }
 }

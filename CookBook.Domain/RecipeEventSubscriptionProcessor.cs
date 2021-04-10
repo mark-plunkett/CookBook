@@ -1,5 +1,6 @@
 ﻿using CookBook.Domain.Events;
 using EventStore.ClientAPI;
+using MediatR;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Raven.Client.Documents;
@@ -19,6 +20,7 @@ namespace CookBook.Domain
         private readonly ILogger<RecipeEventSubscriptionProcessor> logger;
         private readonly IDocumentStore documentStore;
         private readonly IAggregateRepository aggregateRepository;
+        private readonly IMediator mediator;
 
         private EventStoreStreamCatchUpSubscription subscription;
 
@@ -26,12 +28,14 @@ namespace CookBook.Domain
             IEventStoreConnection eventStoreConnection,
             ILogger<RecipeEventSubscriptionProcessor> logger,
             IDocumentStore documentStore,
-            IAggregateRepository aggregateRepository)
+            IAggregateRepository aggregateRepository,
+            IMediator mediator)
         {
             this.eventStoreConnection = eventStoreConnection;
             this.logger = logger;
             this.documentStore = documentStore;
             this.aggregateRepository = aggregateRepository;
+            this.mediator = mediator;
         }
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
@@ -80,17 +84,12 @@ namespace CookBook.Domain
                 var eventData = JsonSerializer.Deserialize(Encoding.UTF8.GetString(e.Event.Data), eventType);
                 var recipe = await this.aggregateRepository.LoadAsync<Recipe>(StreamNameToID(e.Event.EventStreamId));
                 await snapshotRepo.Save(recipe);
+                await this.mediator.Publish(new RecipeModifiedNotification(recipe));
             }
             catch (Exception ex)
             {
                 this.logger.LogError($"Error processing event {e}: {ex}");
             }
-        }
-
-        private bool TryGetType(string name, out Type type)
-        {
-            type = Type.GetType(name);
-            return type != null;
         }
 
         private Guid StreamNameToID(string streamName) => new Guid(streamName.Substring(streamName.IndexOf("-") + 1));

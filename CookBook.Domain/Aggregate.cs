@@ -11,8 +11,7 @@ namespace CookBook.Domain
 
         public Guid ID { get; protected set; } = Guid.Empty;
         public long Version { get; private set; } = -1;
-        [EditorBrowsable(EditorBrowsableState.Never)]
-        public string Id => $"{this.GetType().Name}-{this.ID}";
+        public string DocumentID => $"{this.GetType().Name}-{this.ID}";
 
         protected abstract void When(IEvent @event);
 

@@ -19,43 +19,17 @@ namespace CookBook.Web.React.Controllers
     public class RecipesController : ControllerBase
     {
         private readonly IMediator mediator;
-        private readonly IDocumentStore documentStore;
 
         public RecipesController(
-            IMediator mediator,
-            IDocumentStore documentStore)
+            IMediator mediator)
         {
             this.mediator = mediator;
-            this.documentStore = documentStore;
         }
 
         [HttpGet]
         public async Task<IEnumerable<RecipeListDto>> List()
         {
             return await this.mediator.Send(new RecipeListRequest());
-        }
-
-        [HttpGet("raven")]
-        public async Task<RecipeListDto> Raven()
-        {
-            var id = Guid.NewGuid();
-            using (var session = this.documentStore.OpenSession())
-            {
-                var listDto = new RecipeListDto
-                {
-                    ID = id,
-                    Title = "Recipe " + DateTime.UtcNow.ToString()
-                };
-
-                session.Store(listDto);
-
-                session.SaveChanges();
-            }
-
-            using (var session = this.documentStore.OpenSession())
-            {
-                return session.Load<RecipeListDto>(id.ToString());
-            }
         }
 
         [HttpPost("create")]

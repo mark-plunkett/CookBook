@@ -1,4 +1,5 @@
 using CookBook.Domain;
+using CookBook.Web.React.Sync;
 using EventStore.ClientAPI;
 using MediatR;
 using MediatR.Pipeline;
@@ -43,6 +44,8 @@ namespace CookBook.Web.React
             {
                 configuration.RootPath = "ClientApp/build";
             });
+
+            services.AddSignalR();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -70,6 +73,8 @@ namespace CookBook.Web.React
                 endpoints.MapControllerRoute(
                     name: "default",
                     pattern: "{controller}/{action=Index}/{id?}");
+
+                endpoints.MapHub<RecipeHub>("/recipeHub");
             });
 
             app.UseSpa(spa =>
