@@ -32,6 +32,7 @@ export class CreateRecipe extends Component {
     async handleSubmit(event) {
         event.preventDefault();
         await createRecipe(this.state);
+        this.props.history.push("/");
     }
 
     render() {

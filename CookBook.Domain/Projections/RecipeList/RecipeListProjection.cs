@@ -1,4 +1,5 @@
 ﻿using MediatR;
+using Raven.Client.Documents;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,16 +11,24 @@ namespace CookBook.Domain.Projections.RecipeList
 {
     public class RecipeListProjection : IRequestHandler<RecipeListRequest, IEnumerable<RecipeListDto>>
     {
-        public Task<IEnumerable<RecipeListDto>> Handle(RecipeListRequest request, CancellationToken cancellationToken)
+        private readonly IDocumentStore documentStore;
+
+        public RecipeListProjection(
+            IDocumentStore documentStore)
         {
-            return Task.FromResult(new[]
-            {
-                new RecipeListDto
+            this.documentStore = documentStore;
+        }
+
+        public async Task<IEnumerable<RecipeListDto>> Handle(RecipeListRequest request, CancellationToken cancellationToken)
+        {
+            using var session = documentStore.OpenAsyncSession();
+            return await session.Query<Recipe>()
+                .Select(r => new RecipeListDto
                 {
-                    Id = Guid.NewGuid().ToString(),
-                    Title = "test r"
-                }
-            }.AsEnumerable());
+                    ID = r.ID,
+                    Title = r.Title
+                })
+                .ToListAsync();
         }
     }
 }

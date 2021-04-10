@@ -69,7 +69,7 @@ namespace CookBook.Domain
             // Save snapshot
 
             using var ravenSession = this.documentStore.OpenAsyncSession();
-            var checkpointRepo = new CheckpointRespository(ravenSession);
+            var snapshotRepo = new SnapshotRepo(ravenSession); 
 
             try
             {
@@ -79,8 +79,7 @@ namespace CookBook.Domain
 
                 var eventData = JsonSerializer.Deserialize(Encoding.UTF8.GetString(e.Event.Data), eventType);
                 var recipe = await this.aggregateRepository.LoadAsync<Recipe>(StreamNameToID(e.Event.EventStreamId));
-                await ravenSession.StoreAsync(recipe);
-                await ravenSession.SaveChangesAsync();
+                await snapshotRepo.Save(recipe);
             }
             catch (Exception ex)
             {

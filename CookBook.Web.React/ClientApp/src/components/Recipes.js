@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
+import { Button, Form } from 'react-bulma-components';
 import { getRecipes } from '../models/recipes';
 
 export class Recipes extends Component {
@@ -40,9 +41,9 @@ export class Recipes extends Component {
 
         return (
             <div>
-                <h1 id="tabelLabel" >Recipes</h1>
-                <p>This component demonstrates fetching data from the server.</p>
-                <Link to="/recipes/create">Create Recipe</Link>
+                <h1 id="tabelLabel">Recipes</h1>
+                <p>Delicious recipes...</p>
+                <Button to="/recipes/create" renderAs={Link} className="is-link">Create Recipe</Button>
                 {contents}
             </div>
         );

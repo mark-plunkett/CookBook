@@ -43,7 +43,7 @@ namespace CookBook.Web.React.Controllers
             {
                 var listDto = new RecipeListDto
                 {
-                    Id = id.ToString(),
+                    ID = id,
                     Title = "Recipe " + DateTime.UtcNow.ToString()
                 };
 
