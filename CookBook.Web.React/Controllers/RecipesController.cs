@@ -38,5 +38,19 @@ namespace CookBook.Web.React.Controllers
             await this.mediator.Send(command);
             return Ok();
         }
+
+        [HttpPatch("{id}/favourite")]
+        public async Task<IActionResult> Favourite(Guid id)
+        {
+            await this.mediator.Send(new FavouriteRecipeCommand(id, true));
+            return Ok();
+        }
+
+        [HttpPatch("{id}/unfavourite")]
+        public async Task<IActionResult> Unfavourite(Guid id)
+        {
+            await this.mediator.Send(new FavouriteRecipeCommand(id, false));
+            return Ok();
+        }
     }
 }

@@ -22,13 +22,14 @@ namespace CookBook.Domain
             _changes.Add(@event);
         }
 
-        public void Load(long version, IEnumerable<IEvent> history)
+        public void Load(long version, IEnumerable<BaseEvent> history)
         {
             Version = version;
 
             foreach (var e in history)
             {
-                When(e);
+                When(e.Event);
+                this.Version = e.Version;
             }
         }
 

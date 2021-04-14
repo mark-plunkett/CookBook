@@ -17,13 +17,20 @@ namespace CookBook.Domain
             this.session = session;
         }
 
-        public async Task Save<TAggregate>(TAggregate aggregate) where TAggregate : Aggregate
+        public async Task<TAggregate> Get<TAggregate>(string documentID) where TAggregate : Aggregate
+        {
+            return await this.session.LoadAsync<TAggregate>(documentID);
+        }
+
+        public async Task SaveAggregate<TAggregate>(TAggregate aggregate) where TAggregate : Aggregate
         {
             var doc = await this.session.LoadAsync<TAggregate>(aggregate.DocumentID);
             if (doc != null && doc.Version == aggregate.Version)
                 return;
 
-            await this.session.StoreAsync(aggregate, aggregate.DocumentID);
+            if (doc == null)
+                await this.session.StoreAsync(aggregate, aggregate.DocumentID);
+            
             await this.session.SaveChangesAsync();
         }
     }

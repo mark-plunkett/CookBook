@@ -26,7 +26,8 @@ namespace CookBook.Domain.Projections.RecipeList
                 .Select(r => new RecipeListDto
                 {
                     ID = r.ID,
-                    Title = r.Title
+                    Title = r.Title,
+                    IsFavourite = r.IsFavourite
                 })
                 .ToListAsync();
         }

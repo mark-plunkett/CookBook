@@ -68,28 +68,39 @@ namespace CookBook.Domain
         {
             this.logger.LogInformation($"{nameof(ProcessEvent)} {e.Event.EventType} #{e.OriginalEventNumber}");
 
-            // Build aggregate from current snapshot of recipe list
-            // Apply new events
-            // Save snapshot
-
-            using var ravenSession = this.documentStore.OpenAsyncSession();
-            var snapshotRepo = new SnapshotRepo(ravenSession); 
-
             try
             {
                 var eventType = Type.GetType(Encoding.UTF8.GetString(e.Event.Metadata));
                 if (!EventRegister.Events.Contains(eventType))
                     return;
 
-                var eventData = JsonSerializer.Deserialize(Encoding.UTF8.GetString(e.Event.Data), eventType);
-                var recipe = await this.aggregateRepository.LoadAsync<Recipe>(StreamNameToID(e.Event.EventStreamId));
-                await snapshotRepo.Save(recipe);
-                await this.mediator.Publish(new RecipeModifiedNotification(recipe));
+                var @event = JsonSerializer.Deserialize(Encoding.UTF8.GetString(e.Event.Data), eventType) as IEvent;
+                var recipe = await UpdateRecipe(e.Event.EventStreamId, @event);
+                await this.mediator.Publish(new RecipeModifiedNotification(recipe, @event));
             }
             catch (Exception ex)
             {
                 this.logger.LogError($"Error processing event {e}: {ex}");
             }
+        }
+
+        private async Task<Recipe> UpdateRecipe(string eventStreamId, IEvent eventData)
+        {
+            using var ravenSession = this.documentStore.OpenAsyncSession();
+            var snapshotRepo = new SnapshotRepo(ravenSession);
+            var recipe = await snapshotRepo.Get<Recipe>(eventStreamId);
+            if (recipe != null)
+            {
+                recipe.Apply(eventData);
+            }
+            else
+            {
+                recipe = await this.aggregateRepository.LoadAsync<Recipe>(StreamNameToID(eventStreamId));
+                await ravenSession.StoreAsync(recipe, recipe.DocumentID);
+            }
+
+            await ravenSession.SaveChangesAsync();
+            return recipe;
         }
 
         private Guid StreamNameToID(string streamName) => new Guid(streamName.Substring(streamName.IndexOf("-") + 1));

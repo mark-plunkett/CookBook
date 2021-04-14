@@ -5,11 +5,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace CookBook.Domain
+namespace CookBook.Domain.Commands
 {
-    public record RecipeModifiedNotification(
-        Recipe Recipe,
-        IEvent Event
-        ) : INotification
+    public record FavouriteRecipeCommand(
+        Guid RecipeID,
+        bool IsFavourite)
+        : IRequest
     { }
 }

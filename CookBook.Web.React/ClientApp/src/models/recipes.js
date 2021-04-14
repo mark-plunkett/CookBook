@@ -15,6 +15,8 @@ export const createRecipe = async (recipe) => {
     return await api.post("/recipes/create", recipe);
 }
 
+
+
 const subject = new Subject();
 
 const initialState = {
@@ -38,12 +40,22 @@ export const recipeStore = {
             recipes: [...state.recipes, recipe]
         }
         subject.next(state);
+    },
+    updateRecipe: async (recipe) => {
+        state = {
+            recipes: state.recipes.map(r => r.id === recipe.id ? recipe : r)
+        }
+        subject.next(state);
     }
 };
 
 const hub = new HubConnectionBuilder().withUrl("/recipeHub").build();
-hub.on("RecieveRecipe", function (r) {
+hub.on("RecipeCreated", function (r) {
     recipeStore.appendRecipe(r);
+});
+
+hub.on("RecipeUpdated", function (r) {
+    recipeStore.updateRecipe(r);
 });
 
 hub.start().then(function () {

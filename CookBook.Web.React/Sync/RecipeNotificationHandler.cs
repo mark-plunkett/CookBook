@@ -1,4 +1,5 @@
 ﻿using CookBook.Domain;
+using CookBook.Domain.Events;
 using MediatR;
 using Microsoft.AspNetCore.SignalR;
 using System;
@@ -21,7 +22,11 @@ namespace CookBook.Web.React.Sync
 
         public Task Handle(RecipeModifiedNotification notification, CancellationToken cancellationToken)
         {
-            return this.hubContext.Clients.All.RecieveRecipe(notification.Recipe);
+            switch (notification.Event)
+            {
+                case RecipeCreated: return this.hubContext.Clients.All.RecipeCreated(notification.Recipe);
+                default: return this.hubContext.Clients.All.RecipeUpdated(notification.Recipe);
+            }
         }
     }
 }

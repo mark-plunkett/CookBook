@@ -9,9 +9,14 @@ namespace CookBook.Web.React.Sync
 {
     public class RecipeHub : Hub<IRecipeClient>
     {
-        public Task SendRecipe(Recipe recipe)
+        public Task SendRecipeCreated(Recipe recipe)
         {
-            return Clients.All.RecieveRecipe(recipe);
+            return Clients.All.RecipeCreated(recipe);
+        }
+
+        public Task SendRecipeUpdated(Recipe recipe)
+        {
+            return Clients.All.RecipeUpdated(recipe);
         }
     }
 }

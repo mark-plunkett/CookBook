@@ -22,6 +22,7 @@ namespace CookBook.Domain
             switch (@event)
             {
                 case RecipeCreated e: OnCreated(e); break;
+                case RecipeFavourited e: OnFavourited(e); break;
             }
         }
 
@@ -45,6 +46,22 @@ namespace CookBook.Domain
                 command.Servings));
         }
 
+        public void Favourite()
+        {
+            if (this.IsFavourite)
+                return;
+
+            base.Apply(new RecipeFavourited(this.ID, IsFavourite: true));
+        }
+
+        public void Unfavourite()
+        {
+            if (!this.IsFavourite)
+                return;
+
+            base.Apply(new RecipeFavourited(this.ID, IsFavourite: false));
+        }
+
         private void OnCreated(RecipeCreated e)
         {
             base.ID = e.RecipeID;
@@ -53,6 +70,11 @@ namespace CookBook.Domain
             this.Instructions = e.Instructions;
             this.Ingredients = e.Ingredients;
             this.Servings = e.Servings;
+        }
+
+        private void OnFavourited(RecipeFavourited e)
+        {
+            this.IsFavourite = e.IsFavourite;
         }
     }
 }

@@ -57,8 +57,7 @@ namespace CookBook.Domain
                     aggregate.Load(
                         page.Events.Last().Event.EventNumber,
                         page.Events
-                            .Select(e => JsonSerializer.Deserialize(Encoding.UTF8.GetString(e.OriginalEvent.Data), Type.GetType(Encoding.UTF8.GetString(e.OriginalEvent.Metadata))))
-                            .Cast<IEvent>()
+                            .Select(e => new BaseEvent(e.OriginalEvent.EventNumber, JsonSerializer.Deserialize(Encoding.UTF8.GetString(e.OriginalEvent.Data), Type.GetType(Encoding.UTF8.GetString(e.OriginalEvent.Metadata))) as IEvent))
                             .ToArray());
                 }
 

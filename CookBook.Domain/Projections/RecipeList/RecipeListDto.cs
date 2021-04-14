@@ -6,5 +6,6 @@ namespace CookBook.Domain.Projections.RecipeList
     {
         public Guid ID { get; set; }
         public string Title { get; set; }
+        public bool IsFavourite { get; set; }
     }
 }

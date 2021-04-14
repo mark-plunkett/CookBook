@@ -5,6 +5,7 @@ namespace CookBook.Web.React.Sync
 {
     public interface IRecipeClient
     {
-        Task RecieveRecipe(Recipe recipe);
+        Task RecipeCreated(Recipe recipe);
+        Task RecipeUpdated(Recipe recipe);
     }
 }
