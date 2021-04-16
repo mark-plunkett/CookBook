@@ -4,6 +4,7 @@ using MediatR;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Raven.Client.Documents;
+using Raven.Client.Documents.Session;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,6 +17,8 @@ namespace CookBook.Domain
 {
     public class RecipeEventSubscriptionProcessor : BackgroundService
     {
+        const string StreamName = "$ce-Recipe";
+
         private readonly IEventStoreConnection eventStoreConnection;
         private readonly ILogger<RecipeEventSubscriptionProcessor> logger;
         private readonly IDocumentStore documentStore;
@@ -42,10 +45,8 @@ namespace CookBook.Domain
         {
             this.logger.LogInformation($"{nameof(ExecuteAsync)} started");
 
-            // Wait for events from the $ce-recipe stream
-
             var checkpointRepo = new CheckpointRespository(this.documentStore.OpenAsyncSession());
-            var pos = await checkpointRepo.Get("recipes");
+            var pos = await checkpointRepo.Get(StreamName);
 
             var settings = new CatchUpSubscriptionSettings(
                 maxLiveQueueSize: 10000,
@@ -55,8 +56,8 @@ namespace CookBook.Domain
                 subscriptionName: "Recipes");
 
             this.subscription = this.eventStoreConnection.SubscribeToStreamFrom(
-                "$ce-Recipe",
-                pos?.CommitPosition ?? StreamCheckpoint.StreamStart,
+                StreamName,
+                pos ?? StreamCheckpoint.StreamStart,
                 settings,
                 ProcessEvent,
                 _ => this.logger.LogInformation("Subscription processing started"),
@@ -74,9 +75,11 @@ namespace CookBook.Domain
                 if (!EventRegister.Events.Contains(eventType))
                     return;
 
-                var @event = JsonSerializer.Deserialize(Encoding.UTF8.GetString(e.Event.Data), eventType) as IEvent;
-                var recipe = await UpdateRecipe(e.Event.EventStreamId, @event);
+                var @event = JsonSerializer.Deserialize(Encoding.UTF8.GetString(e.Event.Data), eventType) as IDomainEvent;
+                using var ravenSession = this.documentStore.OpenAsyncSession();
+                var recipe = await UpdateRecipe(ravenSession, e.Event.EventStreamId, @event);
                 await this.mediator.Publish(new RecipeModifiedNotification(recipe, @event));
+                await new CheckpointRespository(ravenSession).Save(StreamName, e.OriginalEventNumber);
             }
             catch (Exception ex)
             {
@@ -84,14 +87,13 @@ namespace CookBook.Domain
             }
         }
 
-        private async Task<Recipe> UpdateRecipe(string eventStreamId, IEvent eventData)
+        private async Task<Recipe> UpdateRecipe(IAsyncDocumentSession ravenSession, string eventStreamId, IDomainEvent @event)
         {
-            using var ravenSession = this.documentStore.OpenAsyncSession();
             var snapshotRepo = new SnapshotRepo(ravenSession);
             var recipe = await snapshotRepo.Get<Recipe>(eventStreamId);
             if (recipe != null)
             {
-                recipe.Apply(eventData);
+                recipe.Apply(@event);
             }
             else
             {

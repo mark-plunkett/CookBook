@@ -9,6 +9,6 @@ namespace CookBook.Domain
 {
     public class CheckpointDocument
     {
-        public Position Position { get; set; }
+        public long? Position { get; set; }
     }
 }

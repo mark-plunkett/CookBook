@@ -5,7 +5,7 @@ namespace CookBook.Domain
 {
     public interface ICheckpointRespository
     {
-        Task<Position?> Get(string key);
-        Task Save(string key, Position position);
+        Task<long?> Get(string key);
+        Task Save(string key, long position);
     }
 }

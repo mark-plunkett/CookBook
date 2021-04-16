@@ -6,7 +6,9 @@ using System.Threading.Tasks;
 
 namespace CookBook.Domain
 {
-    public record BaseEvent(long Version, IDomainEvent Event)
+    public class RecipePicture
     {
+        public string FileName { get; set; }
+        public string Hash { get; set; }
     }
 }

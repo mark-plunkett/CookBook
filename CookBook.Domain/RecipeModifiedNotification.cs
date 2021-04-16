@@ -9,7 +9,7 @@ namespace CookBook.Domain
 {
     public record RecipeModifiedNotification(
         Recipe Recipe,
-        IEvent Event
+        IDomainEvent Event
         ) : INotification
     { }
 }

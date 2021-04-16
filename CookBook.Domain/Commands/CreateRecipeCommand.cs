@@ -14,5 +14,6 @@ namespace CookBook.Domain.Commands
         public string Instructions { get; set; }
         public string Ingredients { get; set; }
         public int Servings { get; set; }
+        public string RecipeAlbumDocumentID { get; set; }
     }
 }

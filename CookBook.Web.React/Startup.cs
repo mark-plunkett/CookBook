@@ -106,7 +106,7 @@ namespace CookBook.Web.React
 
         private void ConfigureMediatR(IServiceCollection services)
         {
-            var assemblies = new[] { typeof(Startup).Assembly, typeof(IEvent).Assembly };
+            var assemblies = new[] { typeof(Startup).Assembly, typeof(IDomainEvent).Assembly };
             services.AddMediatR(assemblies);
         }
 

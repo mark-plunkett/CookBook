@@ -21,13 +21,13 @@ namespace CookBook.Domain
 
         static string GetFullKey(string key) => $"{key}-checkpoint";
 
-        public async Task<Position?> Get(string key)
+        public async Task<long?> Get(string key)
         {
             var doc = await session.LoadAsync<CheckpointDocument>(GetFullKey(key));
             return doc?.Position;
         }
 
-        public async Task Save(string key, Position position)
+        public async Task Save(string key, long position)
         {
             var doc = new CheckpointDocument
             {

@@ -15,7 +15,15 @@ export const createRecipe = async (recipe) => {
     return await api.post("/recipes/create", recipe);
 }
 
+export const uploadFiles = async (files) => {
+    const data = new FormData();
+    for (var i = 0; i < files.length; i++) {
+        data.append("files", files[i]);
+    }
 
+    const resp = await api.post("/recipes/UploadFiles", data);
+    return resp.data;
+}
 
 const subject = new Subject();
 

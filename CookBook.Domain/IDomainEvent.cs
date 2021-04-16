@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace CookBook.Domain
 {
-    public record BaseEvent(long Version, IDomainEvent Event)
+    public interface IDomainEvent
     {
     }
 }

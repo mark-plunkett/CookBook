@@ -1,8 +1,9 @@
 ﻿import React, { Component } from 'react';
 import { Button, Form } from 'react-bulma-components';
-import { createRecipe } from '../models/recipes';
+import { async } from 'rxjs';
+import { createRecipe, uploadFiles } from '../models/recipes';
 
-const { Input, Field, Control, Label, Textarea } = Form;
+const { Input, Field, Control, Label, Textarea, InputFile } = Form;
 
 export class CreateRecipe extends Component {
 
@@ -13,7 +14,8 @@ export class CreateRecipe extends Component {
             description: '',
             instructions: '',
             ingredients: '',
-            servings: 1
+            servings: 1,
+            recipeAlbumDocumentID: null
         };
 
         this.handleChange = this.handleChange.bind(this);
@@ -26,6 +28,14 @@ export class CreateRecipe extends Component {
         const name = target.name;
         this.setState({
             [name]: value
+        });
+    }
+
+    onFileChange = async event => {
+        const recipeAlbumDocumentID = await uploadFiles(event.target.files);
+        this.setState({
+            ...this.state,
+            recipeAlbumDocumentID: recipeAlbumDocumentID
         });
     }
 
@@ -61,6 +71,11 @@ export class CreateRecipe extends Component {
                                 onChange={this.handleChange} />
                         </Control>
                     </Field>
+                    <Field>
+                        <Label>Pictures</Label>
+                        <InputFile name="pictures" boxed inputProps={{ multiple: true }} onChange={this.onFileChange}>
+                        </InputFile>
+                        </Field>
                     <Field>
                         <Label>Description</Label>
                         <Control>

@@ -7,15 +7,15 @@ namespace CookBook.Domain
 {
     public abstract class Aggregate
     {
-        readonly IList<IEvent> _changes = new List<IEvent>();
+        readonly IList<IDomainEvent> _changes = new List<IDomainEvent>();
 
         public Guid ID { get; protected set; } = Guid.Empty;
         public long Version { get; private set; } = -1;
         public string DocumentID => $"{this.GetType().Name}-{this.ID}";
 
-        protected abstract void When(IEvent @event);
+        protected abstract void When(IDomainEvent @event);
 
-        public void Apply(IEvent @event)
+        public void Apply(IDomainEvent @event)
         {
             When(@event);
 
@@ -33,6 +33,6 @@ namespace CookBook.Domain
             }
         }
 
-        public IEnumerable<IEvent> GetChanges() => _changes.ToArray();
+        public IEnumerable<IDomainEvent> GetChanges() => _changes.ToArray();
     }
 }

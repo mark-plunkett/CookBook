@@ -12,7 +12,8 @@ namespace CookBook.Domain.Events
         string Description,
         string Instructions,
         string Ingredients,
-        int Servings) 
-        : IEvent
+        int Servings,
+        DateTime CreatedOn)
+        : IDomainEvent
     { }
 }

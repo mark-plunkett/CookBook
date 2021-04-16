@@ -4,9 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace CookBook.Domain
+namespace CookBook.Domain.Events
 {
-    public interface IEvent
-    {
-    }
+    public record RecipePictureAttached(string FileName) : IDomainEvent
+    { }
 }

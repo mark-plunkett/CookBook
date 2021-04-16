@@ -4,6 +4,7 @@ using CookBook.Domain.Projections;
 using CookBook.Domain.Projections.RecipeList;
 using EventStore.ClientAPI;
 using MediatR;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Raven.Client.Documents;
 using System;
@@ -51,6 +52,19 @@ namespace CookBook.Web.React.Controllers
         {
             await this.mediator.Send(new FavouriteRecipeCommand(id, false));
             return Ok();
+        }
+
+        [HttpPost("{action}")]
+        public async Task<IActionResult> UploadFiles(IEnumerable<IFormFile> files)
+        {
+            var command = new CreateRecipeAlbumCommand(
+                nameof(Recipe),
+                files.Select(f => new CreateRecipeAlbumCommand.TempFile(
+                    f.FileName,
+                    f.ContentType,
+                    f.OpenReadStream())));
+            var tempID = await this.mediator.Send(command);
+            return Ok(tempID);
         }
     }
 }
