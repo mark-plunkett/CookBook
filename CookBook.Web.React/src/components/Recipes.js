@@ -1,8 +1,13 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
-import { Button, Columns } from 'react-bulma-components';
+import { Button, Columns, Level, Heading, Form } from 'react-bulma-components';
 import { recipeStore } from '../models/recipes';
 import { RecipeListTile } from './RecipeListTile';
+import Icon from 'react-bulma-components/lib/components/icon';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faEdit, faPlus } from '@fortawesome/free-solid-svg-icons'
+
+const { Input, Field, Control } = Form;
 
 export class Recipes extends Component {
     static displayName = Recipes.name;
@@ -43,8 +48,36 @@ export class Recipes extends Component {
 
         return (
             <div>
-                <h1 id="tabelLabel">Recipes</h1>
-                <Button to="/recipes/create" renderAs={Link} className="is-link">Add Recipe</Button>
+                <Level renderAs="nav">
+                    <Level.Side align="left">
+                        <Level.Item>
+                            <Heading>
+                                Recipes
+                        </Heading>
+                        </Level.Item>
+                    </Level.Side>
+                    <Level.Side align="right">
+                        <Level.Item>
+                            <Field kind="addons">
+                                <Control>
+                                    <Input placeholder="Find a recipe..." />
+                                </Control>
+                                <Control>
+                                    <Button renderAs="button">
+                                        Search
+                                    </Button>
+                                </Control>
+                            </Field>
+                        </Level.Item><Level.Item>
+                            <Button to="/recipes/create" renderAs={Link} className="is-link">
+                                <Icon>
+                                    <FontAwesomeIcon icon={faPlus} />
+                                </Icon>
+                                <span>Add Recipe</span>
+                            </Button>
+                        </Level.Item>
+                    </Level.Side>
+                </Level>
                 {contents}
             </div>
         );

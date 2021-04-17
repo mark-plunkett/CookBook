@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import { Button, Card } from 'react-bulma-components';
 import { Link } from 'react-router-dom';
 import Icon from 'react-bulma-components/lib/components/icon';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faEdit } from '@fortawesome/free-solid-svg-icons'
 
 export class RecipeListTile extends Component {
     static displayName = RecipeListTile.name;
@@ -23,7 +25,12 @@ export class RecipeListTile extends Component {
                 </Card.Image>
                 <Card.Content>
                     <p>{this.state.title}</p>
-                    <Button to={'/recipes/edit/' + this.state.id} renderAs={Link} className="is-link is-small">Edit</Button>
+                    <Button to={'/recipes/edit/' + this.state.id} renderAs={Link} className="is-link is-small">
+                        <Icon>
+                            <FontAwesomeIcon icon={faEdit} />
+                        </Icon>
+                        <span>Edit</span>
+                    </Button>
                 </Card.Content>
             </Card>
         );
