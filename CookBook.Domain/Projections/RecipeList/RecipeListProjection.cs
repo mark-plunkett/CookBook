@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace CookBook.Domain.Projections.RecipeList
 {
-    public class RecipeListProjection : IRequestHandler<RecipeListRequest, IEnumerable<RecipeListDto>>
+    public class RecipeListProjection : IRequestHandler<RecipeListRequest, IEnumerable<Recipe>>
     {
         private readonly IDocumentStore documentStore;
 
@@ -19,16 +19,10 @@ namespace CookBook.Domain.Projections.RecipeList
             this.documentStore = documentStore;
         }
 
-        public async Task<IEnumerable<RecipeListDto>> Handle(RecipeListRequest request, CancellationToken cancellationToken)
+        public async Task<IEnumerable<Recipe>> Handle(RecipeListRequest request, CancellationToken cancellationToken)
         {
             using var session = documentStore.OpenAsyncSession();
             return await session.Query<Recipe>()
-                .Select(r => new RecipeListDto
-                {
-                    ID = r.ID,
-                    Title = r.Title,
-                    IsFavourite = r.IsFavourite
-                })
                 .ToListAsync();
         }
     }

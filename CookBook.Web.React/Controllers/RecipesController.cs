@@ -28,7 +28,7 @@ namespace CookBook.Web.React.Controllers
         }
 
         [HttpGet]
-        public async Task<IEnumerable<RecipeListDto>> List()
+        public async Task<IEnumerable<Recipe>> List()
         {
             return await this.mediator.Send(new RecipeListRequest());
         }
