@@ -3,16 +3,17 @@ import { Subject } from "rxjs";
 import { HubConnectionBuilder } from "@microsoft/signalr";
 
 const api = Axios.create({
-    baseURL: "/api"
+    baseURL: process.env.REACT_APP_API_URL
 });
 
 export const getRecipes = async () => {
-    const resp = await api.get("/recipes");
+    console.log(api);
+    const resp = await api.get("recipes");
     return resp.data;
 }
 
 export const createRecipe = async (recipe) => {
-    return await api.post("/recipes/create", recipe);
+    return await api.post("recipes/create", recipe);
 }
 
 export const uploadFiles = async (files) => {
@@ -21,7 +22,7 @@ export const uploadFiles = async (files) => {
         data.append("files", files[i]);
     }
 
-    const resp = await api.post("/recipes/UploadFiles", data);
+    const resp = await api.post("recipes/uploadfiles", data);
     return resp.data;
 }
 
@@ -57,7 +58,7 @@ export const recipeStore = {
     }
 };
 
-const hub = new HubConnectionBuilder().withUrl("/recipeHub").build();
+const hub = new HubConnectionBuilder().withUrl(process.env.REACT_APP_API_URL + "recipeHub").build();
 hub.on("RecipeCreated", function (r) {
     recipeStore.appendRecipe(r);
 });

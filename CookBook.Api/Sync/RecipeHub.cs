@@ -1,11 +1,12 @@
 ﻿using CookBook.Domain;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace CookBook.Web.React.Sync
+namespace CookBook.Api.Sync
 {
     public class RecipeHub : Hub<IRecipeClient>
     {

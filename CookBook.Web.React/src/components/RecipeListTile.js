@@ -16,7 +16,7 @@ export class RecipeListTile extends Component {
             <Card>
                 <Card.Image
                     size="square"
-                    src={'/api/recipes/' + this.state.id + '/primaryimage?width=480&height=480'}
+                    src={process.env.REACT_APP_API_URL + 'recipes/' + this.state.id + '/primaryimage?width=480&height=480'}
                     width={480}
                     height="auto">
 

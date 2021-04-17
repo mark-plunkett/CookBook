@@ -7,7 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace CookBook.Web.React
+namespace CookBook.Api
 {
     public class Program
     {

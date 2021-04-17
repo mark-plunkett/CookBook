@@ -1,5 +1,5 @@
 using CookBook.Domain;
-using CookBook.Web.React.Sync;
+using CookBook.Api.Sync;
 using EventStore.ClientAPI;
 using MediatR;
 using MediatR.Pipeline;
@@ -14,7 +14,7 @@ using Raven.Client.Documents;
 using Raven.Client.Documents.Session;
 using System;
 
-namespace CookBook.Web.React
+namespace CookBook.Api
 {
     public class Startup
     {
@@ -39,12 +39,6 @@ namespace CookBook.Web.React
 
             services.AddHostedService<RecipeEventSubscriptionProcessor>();
 
-            // In production, the React files will be served from this directory
-            services.AddSpaStaticFiles(configuration =>
-            {
-                configuration.RootPath = "ClientApp/build";
-            });
-
             services.AddSignalR();
         }
 
@@ -54,6 +48,13 @@ namespace CookBook.Web.React
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
+                app.UseCors(options =>
+                {
+                    options.WithOrigins("http://localhost:3000");
+                    options.AllowCredentials();
+                    options.AllowAnyMethod();
+                    options.AllowAnyHeader();
+                });
             }
             else
             {
@@ -64,7 +65,6 @@ namespace CookBook.Web.React
 
             app.UseHttpsRedirection();
             app.UseStaticFiles();
-            app.UseSpaStaticFiles();
 
             app.UseRouting();
 
@@ -74,17 +74,7 @@ namespace CookBook.Web.React
                     name: "default",
                     pattern: "{controller}/{action=Index}/{id?}");
 
-                endpoints.MapHub<RecipeHub>("/recipeHub");
-            });
-
-            app.UseSpa(spa =>
-            {
-                spa.Options.SourcePath = "ClientApp";
-
-                if (env.IsDevelopment())
-                {
-                    spa.UseReactDevelopmentServer(npmScript: "start");
-                }
+                endpoints.MapHub<RecipeHub>("api/recipeHub");
             });
         }
 

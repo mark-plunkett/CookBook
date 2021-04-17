@@ -1,6 +1,6 @@
 using System;
 
-namespace CookBook.Web.React
+namespace CookBook.Api
 {
     public class WeatherForecast
     {

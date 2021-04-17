@@ -1,7 +1,7 @@
 ﻿using CookBook.Domain;
 using System.Threading.Tasks;
 
-namespace CookBook.Web.React.Sync
+namespace CookBook.Api.Sync
 {
     public interface IRecipeClient
     {

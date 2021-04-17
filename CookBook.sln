@@ -3,11 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.31129.286
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CookBook.Web.React", "CookBook.Web.React\CookBook.Web.React.csproj", "{43EF42E5-2CE4-46BA-B38C-A493005B2ACA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CookBook.Domain", "CookBook.Domain\CookBook.Domain.csproj", "{3E94335E-B2BE-4D5F-A95E-909EC31610DA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CookBook.Domain", "CookBook.Domain\CookBook.Domain.csproj", "{3E94335E-B2BE-4D5F-A95E-909EC31610DA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CookBook.Prototyping", "CookBook.Prototyping\CookBook.Prototyping.csproj", "{012771ED-C44F-4444-8860-F0A5A39858C1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CookBook.Prototyping", "CookBook.Prototyping\CookBook.Prototyping.csproj", "{012771ED-C44F-4444-8860-F0A5A39858C1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CookBook.Api", "CookBook.Api\CookBook.Api.csproj", "{49C7AC14-3059-45A9-AAE8-C0EC62C3EDDE}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,10 +15,6 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{43EF42E5-2CE4-46BA-B38C-A493005B2ACA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{43EF42E5-2CE4-46BA-B38C-A493005B2ACA}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{43EF42E5-2CE4-46BA-B38C-A493005B2ACA}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{43EF42E5-2CE4-46BA-B38C-A493005B2ACA}.Release|Any CPU.Build.0 = Release|Any CPU
 		{3E94335E-B2BE-4D5F-A95E-909EC31610DA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{3E94335E-B2BE-4D5F-A95E-909EC31610DA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3E94335E-B2BE-4D5F-A95E-909EC31610DA}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -27,6 +23,10 @@ Global
 		{012771ED-C44F-4444-8860-F0A5A39858C1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{012771ED-C44F-4444-8860-F0A5A39858C1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{012771ED-C44F-4444-8860-F0A5A39858C1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{49C7AC14-3059-45A9-AAE8-C0EC62C3EDDE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{49C7AC14-3059-45A9-AAE8-C0EC62C3EDDE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{49C7AC14-3059-45A9-AAE8-C0EC62C3EDDE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{49C7AC14-3059-45A9-AAE8-C0EC62C3EDDE}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -13,7 +13,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace CookBook.Web.React.Controllers
+namespace CookBook.Api.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]

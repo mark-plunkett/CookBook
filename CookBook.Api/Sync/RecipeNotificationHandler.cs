@@ -8,7 +8,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace CookBook.Web.React.Sync
+namespace CookBook.Api.Sync
 {
     public class RecipeNotificationHandler : INotificationHandler<RecipeModifiedNotification>
     {
