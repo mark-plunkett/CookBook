@@ -8,6 +8,10 @@ using System.Threading.Tasks;
 
 namespace CookBook.Domain.Commands
 {
-    public record GetPrimaryRecipeImageQuery(Guid RecipeID) : IRequest<(Stream, string)>
+    public record GetPrimaryRecipeImageQuery(
+        Guid RecipeID,
+        int Width,
+        int Height)
+        : IRequest<(Stream, string)>
     { }
 }

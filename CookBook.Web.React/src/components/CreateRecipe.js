@@ -1,6 +1,5 @@
 ﻿import React, { Component } from 'react';
 import { Button, Form } from 'react-bulma-components';
-import { async } from 'rxjs';
 import { createRecipe, uploadFiles } from '../models/recipes';
 
 const { Input, Field, Control, Label, Textarea, InputFile } = Form;

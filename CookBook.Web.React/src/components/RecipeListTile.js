@@ -15,13 +15,12 @@ export class RecipeListTile extends Component {
 
     render() {
         return (
-            <Card>
+            <Card className="is-shady">
                 <Card.Image
                     size="square"
                     src={process.env.REACT_APP_API_URL + 'recipes/' + this.state.id + '/primaryimage?width=480&height=480'}
                     width={480}
                     height="auto">
-
                 </Card.Image>
                 <Card.Content>
                     <p>{this.state.title}</p>

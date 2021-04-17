@@ -70,7 +70,7 @@ namespace CookBook.Api.Controllers
         [HttpGet("{id}/{action}")]
         public async Task<IActionResult> PrimaryImage(Guid id, int width, int height)
         {
-            var (stream, contentType) = await this.mediator.Send(new GetPrimaryRecipeImageQuery(id));
+            var (stream, contentType) = await this.mediator.Send(new GetPrimaryRecipeImageQuery(id, width, height));
             return File(stream, contentType);
         }
     }
