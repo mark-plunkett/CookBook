@@ -8,9 +8,11 @@ namespace CookBook.Domain
 {
     record RecipeAlbumDocument(string Id)
     {
+        public static string GetDocumentId(Guid recipeID) => $"RecipeAlbum-{recipeID}";
+
         public static RecipeAlbumDocument Create(Guid guid)
         {
-            return new RecipeAlbumDocument($"RecipeAlbum-{guid}");
+            return new RecipeAlbumDocument(GetDocumentId(guid));
         }
 
         public static RecipeAlbumDocument Create()

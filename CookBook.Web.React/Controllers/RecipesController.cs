@@ -40,14 +40,14 @@ namespace CookBook.Web.React.Controllers
             return Ok();
         }
 
-        [HttpPatch("{id}/favourite")]
+        [HttpPatch("{id}/{action}")]
         public async Task<IActionResult> Favourite(Guid id)
         {
             await this.mediator.Send(new FavouriteRecipeCommand(id, true));
             return Ok();
         }
 
-        [HttpPatch("{id}/unfavourite")]
+        [HttpPatch("{id}/{action}")]
         public async Task<IActionResult> Unfavourite(Guid id)
         {
             await this.mediator.Send(new FavouriteRecipeCommand(id, false));
@@ -65,6 +65,13 @@ namespace CookBook.Web.React.Controllers
                     f.OpenReadStream())));
             var tempID = await this.mediator.Send(command);
             return Ok(tempID);
+        }
+
+        [HttpGet("{id}/{action}")]
+        public async Task<IActionResult> PrimaryImage(Guid id, int width, int height)
+        {
+            var (stream, contentType) = await this.mediator.Send(new GetPrimaryRecipeImageQuery(id));
+            return File(stream, contentType);
         }
     }
 }

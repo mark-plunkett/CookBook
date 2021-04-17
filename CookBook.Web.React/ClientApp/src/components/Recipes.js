@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
-import { Button, Form, Table } from 'react-bulma-components';
+import { Button, Columns } from 'react-bulma-components';
 import { recipeStore } from '../models/recipes';
+import { RecipeListTile } from './RecipeListTile';
 
 export class Recipes extends Component {
     static displayName = Recipes.name;
@@ -23,31 +24,22 @@ export class Recipes extends Component {
         this.recipeSubscription$.unsubscribe();
     }
 
-    static renderRecipesTable(recipes) {
+    static renderRecipes(recipes) {
         return (
-            <Table className='table table-striped' aria-labelledby="tabelLabel">
-                <thead>
-                    <tr>
-                        <th>Title</th>
-                        <th>Favourite</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {recipes.map(recipe =>
-                        <tr key={recipe.title}>
-                            <td>{recipe.title}</td>
-                            <td>{recipe.isFavourite ? 'fav' : 'notfav'}</td>
-                        </tr>
-                    )}
-                </tbody>
-            </Table>
+            <Columns>
+                {recipes.map(recipe =>
+                    <Columns.Column key={recipe.id} size={3}>
+                        <RecipeListTile recipe={recipe} />
+                    </Columns.Column>
+                )}
+            </Columns>
         );
     }
 
     render() {
         let contents = this.state.loading
             ? <p><em>Loading...</em></p>
-            : Recipes.renderRecipesTable(this.state.recipes);
+            : Recipes.renderRecipes(this.state.recipes);
 
         return (
             <div>
