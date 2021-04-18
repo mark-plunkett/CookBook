@@ -5,13 +5,12 @@ import { recipeStore } from '../models/recipes';
 import { RecipeListTile } from './RecipeListTile';
 import Icon from 'react-bulma-components/lib/components/icon';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faEdit, faPlus } from '@fortawesome/free-solid-svg-icons'
+import { faPlus } from '@fortawesome/free-solid-svg-icons'
 
 const { Input, Field, Control } = Form;
 
 export class Recipes extends Component {
     static displayName = Recipes.name;
-
 
     constructor(props) {
         super(props);
@@ -60,7 +59,7 @@ export class Recipes extends Component {
                         <Level.Item>
                             <Field kind="addons">
                                 <Control>
-                                    <Input placeholder="Find a recipe..." />
+                                    <Input placeholder="Find a recipe..."  value="" readOnly />
                                 </Control>
                                 <Control>
                                     <Button renderAs="button">

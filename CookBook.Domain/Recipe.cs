@@ -10,8 +10,6 @@ namespace CookBook.Domain
 {
     public class Recipe : Aggregate
     {
-        private readonly List<string> _pictureFileNames = new List<string>();
-
         public string Title { get; private set; }
         public string Description { get; private set; }
         public string Instructions { get; private set; }
@@ -19,7 +17,7 @@ namespace CookBook.Domain
         public int Servings { get; private set; }
         public bool IsFavourite { get; private set; }
         public DateTime CreatedOn { get; private set; }
-        public IEnumerable<string> PictureFileNames => _pictureFileNames.AsReadOnly();
+        public IEnumerable<string> PictureFileNames { get; private set; } = new List<string>();
 
         protected override void When(IDomainEvent @event)
         {
@@ -82,7 +80,7 @@ namespace CookBook.Domain
             if (string.IsNullOrEmpty(fileName))
                 throw new ArgumentNullException(nameof(fileName));
 
-            if (_pictureFileNames.Contains(fileName))
+            if (this.PictureFileNames.Contains(fileName))
                 throw new InvalidOperationException($"File {fileName} already exists.");
 
             base.Apply(new RecipePictureAttached(fileName));
@@ -106,7 +104,7 @@ namespace CookBook.Domain
 
         private void OnPictureAttached(RecipePictureAttached e)
         {
-            _pictureFileNames.Add(e.FileName);
+            (this.PictureFileNames as List<string>).Add(e.FileName);
         }
     }
 }

@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Mvc;
 using Raven.Client.Documents;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -71,6 +72,9 @@ namespace CookBook.Api.Controllers
         public async Task<IActionResult> PrimaryImage(Guid id, int width, int height)
         {
             var (stream, contentType) = await this.mediator.Send(new GetPrimaryRecipeImageQuery(id, width, height));
+            if (stream == Stream.Null)
+                return NotFound();
+
             return File(stream, contentType);
         }
     }

@@ -11,7 +11,8 @@ namespace CookBook.Domain.Events
         public static readonly IEnumerable<Type> Events = new HashSet<Type>(new[]
         {
             typeof(RecipeCreated),
-            typeof(RecipeFavourited)
+            typeof(RecipeFavourited),
+            typeof(RecipePictureAttached)
         });
     }
 }

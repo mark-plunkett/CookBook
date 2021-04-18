@@ -7,7 +7,6 @@ const api = Axios.create({
 });
 
 export const getRecipes = async () => {
-    console.log(api);
     const resp = await api.get("recipes");
     return resp.data;
 }
@@ -24,6 +23,14 @@ export const uploadFiles = async (files) => {
 
     const resp = await api.post("recipes/uploadfiles", data);
     return resp.data;
+}
+
+export const favourite = async id => {
+    return await api.patch("recipes/" + id + "/favourite");
+}
+
+export const unfavourite = async id => {
+    return await api.patch("recipes/" + id + "/unfavourite");
 }
 
 const subject = new Subject();
@@ -44,6 +51,7 @@ export const recipeStore = {
         subject.next(state);
     },
     subscribe: setState => subject.subscribe(setState),
+    observe: f => f(subject),
     appendRecipe: async (recipe) => {
         state = {
             recipes: [...state.recipes, recipe]
