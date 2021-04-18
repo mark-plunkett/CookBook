@@ -25,7 +25,7 @@ export class RecipeListTile extends Component {
                 </Card.Image>
                 <Card.Content>
                     <p>{this.state.title}</p>
-                    <Element align="right">
+                    <Element className="buttons is-right">
                         <Button to={'/recipes/edit/' + this.state.id} renderAs={Link} className="is-link">
                             <Icon>
                                 <FontAwesomeIcon icon={faEdit} />
