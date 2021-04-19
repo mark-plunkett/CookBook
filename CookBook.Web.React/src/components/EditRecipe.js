@@ -1,7 +1,6 @@
 ﻿import React, { Component } from 'react';
 import { Button, Form } from 'react-bulma-components';
-import { async } from 'rxjs';
-import { createRecipe, uploadFiles } from '../models/recipes';
+import { updateRecipe, uploadFiles, recipeStore } from '../models/recipes';
 
 const { Input, Field, Control, Label, Textarea, InputFile } = Form;
 
@@ -9,17 +8,14 @@ export class EditRecipe extends Component {
 
     constructor(props) {
         super(props);
-        this.state = {
-            title: '',
-            description: '',
-            instructions: '',
-            ingredients: '',
-            servings: 1,
-            recipeAlbumDocumentID: null
-        };
-
+        this.id = props.match.params.id;
+        this.state = {};
         this.handleChange = this.handleChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
+    }
+
+    async componentDidMount() {
+        this.setState(await recipeStore.get(this.id));
     }
 
     handleChange(event) {
@@ -41,14 +37,14 @@ export class EditRecipe extends Component {
 
     async handleSubmit(event) {
         event.preventDefault();
-        await createRecipe(this.state);
+        await updateRecipe(this.state);
         this.props.history.push("/");
     }
 
     render() {
         return (
             <div>
-                <h1>Create Recipe</h1>
+                <h1>Edit Recipe '{this.state.title}'</h1>
                 <form onSubmit={this.handleSubmit}>
                     <Field>
                         <Control>
@@ -75,7 +71,7 @@ export class EditRecipe extends Component {
                         <Label>Pictures</Label>
                         <InputFile name="pictures" boxed inputProps={{ multiple: true }} onChange={this.onFileChange}>
                         </InputFile>
-                        </Field>
+                    </Field>
                     <Field>
                         <Label>Description</Label>
                         <Control>
@@ -103,7 +99,7 @@ export class EditRecipe extends Component {
                                 onChange={this.handleChange} />
                         </Control>
                     </Field>
-                    <Button className="is-primary" onClick={this.handleSubmit}>Create</Button>
+                    <Button className="is-primary" onClick={this.handleSubmit}>Update</Button>
                 </form>
             </div>
         );

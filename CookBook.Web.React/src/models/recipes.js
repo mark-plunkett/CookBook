@@ -12,7 +12,11 @@ export const getRecipes = async () => {
 }
 
 export const createRecipe = async (recipe) => {
-    return await api.post("recipes/create", recipe);
+    return await api.post("recipes", recipe);
+}
+
+export const updateRecipe = async (recipe) => {
+    return await api.put("recipes", recipe);
 }
 
 export const uploadFiles = async (files) => {
@@ -37,7 +41,8 @@ const subject = new Subject();
 
 const initialState = {
     recipes: [],
-    loading: true
+    loading: true,
+    initialized: false
 };
 
 let state = initialState;
@@ -46,23 +51,30 @@ export const recipeStore = {
     init: async () => {
         state = {
             recipes: await getRecipes(),
-            loading: false
+            loading: false,
+            initialized: true
         };
         subject.next(state);
     },
     subscribe: setState => subject.subscribe(setState),
-    observe: f => f(subject),
     appendRecipe: async (recipe) => {
         state = {
+            ...state,
             recipes: [...state.recipes, recipe]
         }
         subject.next(state);
     },
     updateRecipe: async (recipe) => {
         state = {
+            ...state,
             recipes: state.recipes.map(r => r.id === recipe.id ? recipe : r)
         }
         subject.next(state);
+    },
+    get: async id => {
+        if (!state.initialized)
+            await recipeStore.init();
+        return state.recipes.find(r => r.id === id);
     }
 };
 

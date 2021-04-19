@@ -24,6 +24,7 @@ namespace CookBook.Domain
             switch (@event)
             {
                 case RecipeCreated e: OnCreated(e); break;
+                case RecipeUpdated e: OnUpdated(e); break;
                 case RecipeFavourited e: OnFavourited(e); break;
                 case RecipePictureAttached e: OnPictureAttached(e); break;
             }
@@ -57,6 +58,28 @@ namespace CookBook.Domain
                 ingredients,
                 servings,
                 DateTime.UtcNow));
+        }
+
+        public void Update(
+            string title,
+            string description,
+            string instructions,
+            string ingredients,
+            int servings)
+        {
+            if (string.IsNullOrWhiteSpace(title))
+                throw new ArgumentNullException(nameof(title));
+
+            if (servings < 1)
+                throw new ArgumentOutOfRangeException(nameof(servings));
+
+            base.Apply(new RecipeUpdated(
+                base.ID,
+                title,
+                description,
+                instructions,
+                ingredients,
+                servings));
         }
 
         public void Favourite()
@@ -95,6 +118,15 @@ namespace CookBook.Domain
             this.Ingredients = e.Ingredients;
             this.Servings = e.Servings;
             this.CreatedOn = e.CreatedOn;
+        }
+
+        private void OnUpdated(RecipeUpdated e)
+        {
+            this.Title = e.Title;
+            this.Description = e.Description;
+            this.Instructions = e.Instructions;
+            this.Ingredients = e.Ingredients;
+            this.Servings = e.Servings;
         }
 
         private void OnFavourited(RecipeFavourited e)

@@ -34,8 +34,15 @@ namespace CookBook.Api.Controllers
             return await this.mediator.Send(new RecipeListRequest());
         }
 
-        [HttpPost("create")]
+        [HttpPost]
         public async Task<IActionResult> Create(CreateRecipeCommand command)
+        {
+            await this.mediator.Send(command);
+            return Ok();
+        }
+
+        [HttpPut]
+        public async Task<IActionResult> Update(UpdateRecipeCommand command)
         {
             await this.mediator.Send(command);
             return Ok();
