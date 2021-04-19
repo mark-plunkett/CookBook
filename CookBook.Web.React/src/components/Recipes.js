@@ -33,7 +33,7 @@ export class Recipes extends Component {
             <Columns>
                 {recipes.map(recipe =>
                     <Columns.Column key={recipe.id} size={3}>
-                        <RecipeListTile recipe={recipe} />
+                        <RecipeListTile key={recipe.id} recipe={recipe} />
                     </Columns.Column>
                 )}
             </Columns>
