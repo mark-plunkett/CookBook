@@ -49,11 +49,12 @@ let state = initialState;
 
 export const recipeStore = {
     init: async () => {
-        state = {
-            recipes: await getRecipes(),
-            loading: false,
-            initialized: true
-        };
+        if (!state.initialized)
+            state = {
+                recipes: await getRecipes(),
+                loading: false,
+                initialized: true
+            };
         subject.next(state);
     },
     subscribe: setState => subject.subscribe(setState),
@@ -72,8 +73,7 @@ export const recipeStore = {
         subject.next(state);
     },
     get: async id => {
-        if (!state.initialized)
-            await recipeStore.init();
+        await recipeStore.init();
         return state.recipes.find(r => r.id === id);
     }
 };

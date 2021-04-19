@@ -23,6 +23,7 @@ namespace CookBook.Domain.Projections.RecipeList
         {
             using var session = documentStore.OpenAsyncSession();
             return await session.Query<Recipe>()
+                .OrderByDescending(r => r.CreatedOn)
                 .ToListAsync();
         }
     }

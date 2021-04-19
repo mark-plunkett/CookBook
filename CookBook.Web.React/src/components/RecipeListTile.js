@@ -14,6 +14,10 @@ export class RecipeListTile extends Component {
         this.state = props.recipe;
     }
 
+    componentWillReceiveProps(nextProps) {
+        this.setState(nextProps.recipe);
+    }
+    
     render() {
         return (
             <Card className="is-shady">

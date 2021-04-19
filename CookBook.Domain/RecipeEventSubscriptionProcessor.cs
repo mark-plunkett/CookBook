@@ -1,5 +1,6 @@
 ﻿using CookBook.Domain.Events;
 using EventStore.ClientAPI;
+using EventStore.ClientAPI.Exceptions;
 using MediatR;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
@@ -45,9 +46,13 @@ namespace CookBook.Domain
         {
             this.logger.LogInformation($"{nameof(ExecuteAsync)} started");
 
+            Subscribe();
+        }
+
+        private async Task Subscribe()
+        {
             var checkpointRepo = new CheckpointRespository(this.documentStore.OpenAsyncSession());
             var pos = await checkpointRepo.Get(StreamName);
-
             var settings = new CatchUpSubscriptionSettings(
                 maxLiveQueueSize: 10000,
                 readBatchSize: 500,
@@ -80,6 +85,11 @@ namespace CookBook.Domain
                 var recipe = await UpdateRecipe(ravenSession, e.Event.EventStreamId, @event);
                 await this.mediator.Publish(new RecipeModifiedNotification(recipe, @event));
                 await new CheckpointRespository(ravenSession).Save(StreamName, e.OriginalEventNumber);
+            }
+            catch (ConnectionClosedException connClosedEx)
+            {
+                this.logger.LogError($"Error processing event {e}: {connClosedEx}");
+                await Subscribe();
             }
             catch (Exception ex)
             {

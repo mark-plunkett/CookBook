@@ -6,7 +6,7 @@ export class Header extends Component {
         return (
             <Section>
                 <Container>
-                    <Hero color="primary" gradient>
+                    <Hero color="warning" gradient>
                         <Hero.Body className="has-text-centered">
                             <Heading size={1}>
                                 Cook Book

@@ -19,9 +19,9 @@ export class Recipes extends Component {
         this.recipeSubscription$ = null;
     }
 
-    componentDidMount() {
+    async componentDidMount() {
         this.recipeSubscription$ = recipeStore.subscribe(this.setState);
-        recipeStore.init(this.setState);
+        await recipeStore.init();
     }
 
     componentWillUnmount() {
