@@ -38,7 +38,7 @@ export class EditRecipe extends Component {
     async handleSubmit(event) {
         event.preventDefault();
         await updateRecipe(this.state);
-        this.props.history.push("/");
+        this.props.history.push("/recipes/view/" + this.state.id);
     }
 
     render() {

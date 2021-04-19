@@ -8,7 +8,7 @@ import { FavHeart } from './FavHeart';
 
 export const RecipeListTile = (props) => {
     return (
-        <Card className="is-shady">
+        <Card>
             <Link to={'/recipes/view/' + props.recipe.id}>
                 <Card.Image
                     size="square"
@@ -17,14 +17,9 @@ export const RecipeListTile = (props) => {
                     height="auto">
                 </Card.Image>
             </Link>
-            <Card.Content>
+            <Card.Content className="has-background-white-bis">
                 <p>{props.recipe.title}</p>
                 <Element className="buttons is-right">
-                    <Button to={'/recipes/edit/' + props.recipe.id} renderAs={Link} className="is-link">
-                        <Icon>
-                            <FontAwesomeIcon icon={faEdit} />
-                        </Icon>
-                    </Button>
                     <FavHeart recipe={props.recipe} />
                 </Element>
             </Card.Content>

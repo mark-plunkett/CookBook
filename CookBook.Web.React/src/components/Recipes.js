@@ -50,7 +50,7 @@ export class Recipes extends Component {
                 <Level renderAs="nav">
                     <Level.Side align="left">
                         <Level.Item>
-                            <Heading>
+                            <Heading size={4}>
                                 Recipes
                         </Heading>
                         </Level.Item>
@@ -59,7 +59,7 @@ export class Recipes extends Component {
                         <Level.Item>
                             <Field kind="addons">
                                 <Control>
-                                    <Input placeholder="Find a recipe..."  value="" readOnly />
+                                    <Input placeholder="Find a recipe..." value="" readOnly />
                                 </Control>
                                 <Control>
                                     <Button renderAs="button">

@@ -1,6 +1,10 @@
 ﻿import React, { Component } from 'react';
-import { Button, Columns, Container, Element, Heading, Section, Image } from 'react-bulma-components';
+import { Button, Columns, Level, Element, Heading, Section, Image } from 'react-bulma-components';
 import { recipeStore } from '../models/recipes';
+import { Link } from 'react-router-dom';
+import Icon from 'react-bulma-components/lib/components/icon';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faEdit } from '@fortawesome/free-solid-svg-icons'
 
 export class ViewRecipe extends Component {
 
@@ -15,30 +19,56 @@ export class ViewRecipe extends Component {
             servings: 1,
             recipeAlbumDocumentID: null
         };
+        this.recipeSubscription$ = null;
     }
 
     async componentDidMount() {
-        this.setState(await recipeStore.get(this.id));
+        this.recipeSubscription$ = recipeStore.subscribe(state => {
+            var recipe = state.recipes.find(r => r.id === this.id);
+            this.setState(recipe);
+        });
+        await recipeStore.init();
+    }
+
+    componentWillUnmount() {
+        this.recipeSubscription$.unsubscribe();
+    }
+
+    getImage() { 
+        if (!!this.state.id)
+            return (<Image
+                size="square"
+                src={process.env.REACT_APP_API_URL + 'recipes/' + this.state.id + '/primaryimage?width=480&height=480'}
+                width={480}
+                height="auto">
+            </Image>);
     }
 
     render() {
         return (
             <Element>
-                <h3 className="pt-5">Recipe</h3>
+                <Level className="pt-5">
+                    <Level.Side align="left">
+                        <h3>Recipe</h3>
+                    </Level.Side>
+                    <Level.Side align="right">
+                        <Button to={'/recipes/edit/' + this.state.id} renderAs={Link} className="is-link is-outlined">
+                            <Icon>
+                                <FontAwesomeIcon icon={faEdit} />
+                            </Icon>
+                            <span>Edit</span>
+                        </Button>
+                    </Level.Side>
+                </Level>
                 <hr />
                 <Columns className="pt-5">
                     <Columns.Column size="two-thirds">
                         <Heading className="is-italic has-text-weight-normal" size={4}>{this.state.title}</Heading>
-                        <hr style={{width:'50%'}}/>
+                        <hr style={{ width: '50%' }} />
                         <p size={5} className="pt-3">{this.state.description}</p>
                     </Columns.Column>
                     <Columns.Column size="one-quarter" offset={1}>
-                        <Image
-                            size="square"
-                            src={process.env.REACT_APP_API_URL + 'recipes/' + this.state.id + '/primaryimage?width=480&height=480'}
-                            width={480}
-                            height="auto">
-                        </Image>
+                        {this.getImage()}
                     </Columns.Column>
                 </Columns>
                 <Columns className="pt-3">
@@ -53,7 +83,7 @@ export class ViewRecipe extends Component {
                         </Element>
                         <Element className="px-3 has-text-grey">
                             {this.state.ingredients.split('\n').map((p, idx) => <p key={idx}>{p}</p>)}
-                            </Element>
+                        </Element>
                     </Columns.Column>
                 </Columns>
             </Element>
