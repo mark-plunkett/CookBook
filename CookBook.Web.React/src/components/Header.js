@@ -1,12 +1,13 @@
 import React, { Component } from 'react';
 import { Container, Heading, Hero, Section } from 'react-bulma-components';
+import { Link } from 'react-router-dom';
 
 export class Header extends Component {
     render() {
         return (
-            <Section>
-                <Container>
-                    <Hero color="warning" gradient>
+            <Container>
+                <Hero color="warning" gradient>
+                    <Link to={'/'}>
                         <Hero.Body className="has-text-centered">
                             <Heading size={1}>
                                 Cook Book
@@ -15,9 +16,9 @@ export class Header extends Component {
                                 Yummy recipes
                         </Heading>
                         </Hero.Body>
-                    </Hero>
-                </Container>
-            </Section>
+                    </Link>
+                </Hero>
+            </Container>
         )
     };
 }

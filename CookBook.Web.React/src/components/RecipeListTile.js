@@ -9,12 +9,14 @@ import { FavHeart } from './FavHeart';
 export const RecipeListTile = (props) => {
     return (
         <Card className="is-shady">
-            <Card.Image
-                size="square"
-                src={process.env.REACT_APP_API_URL + 'recipes/' + props.recipe.id + '/primaryimage?width=480&height=480'}
-                width={480}
-                height="auto">
-            </Card.Image>
+            <Link to={'/recipes/view/' + props.recipe.id}>
+                <Card.Image
+                    size="square"
+                    src={process.env.REACT_APP_API_URL + 'recipes/' + props.recipe.id + '/primaryimage?width=480&height=480'}
+                    width={480}
+                    height="auto">
+                </Card.Image>
+            </Link>
             <Card.Content>
                 <p>{props.recipe.title}</p>
                 <Element className="buttons is-right">

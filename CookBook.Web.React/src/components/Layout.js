@@ -11,7 +11,6 @@ export class Layout extends Component {
         <Header />
         <Section>
           <BulmaContainer>
-            <hr />
             {this.props.children}
           </BulmaContainer>
         </Section>

@@ -7,11 +7,11 @@ import { faHeart as farHeart } from '@fortawesome/free-regular-svg-icons'
 import { favourite, unfavourite } from '../models/recipes';
 
 export const FavHeart = (props) => {
-    const onClick = e => {
-        if (props.recipe.isFavourite)
-            unfavourite(props.recipe.id);
-        else
-            favourite(props.recipe.id);
+    const onClick = _ => {
+        const f = props.recipe.isFavourite
+            ? unfavourite
+            : favourite;
+        f(props.recipe.id);
     }
 
     const isFav = props.recipe.isFavourite;
