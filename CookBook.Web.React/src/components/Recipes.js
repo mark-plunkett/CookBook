@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
-import { Button, Columns, Level, Heading, Form } from 'react-bulma-components';
+import { Button, Columns, Element, Level, Heading, Form, Tabs, Container } from 'react-bulma-components';
 import { recipeStore } from '../models/recipes';
 import { RecipeListTile } from './RecipeListTile';
 import Icon from 'react-bulma-components/lib/components/icon';
@@ -46,39 +46,57 @@ export class Recipes extends Component {
             : Recipes.renderRecipes(this.state.recipes);
 
         return (
-            <div>
-                <Level renderAs="nav">
-                    <Level.Side align="left">
-                        <Level.Item>
-                            <Heading size={4}>
-                                Recipes
-                        </Heading>
-                        </Level.Item>
-                    </Level.Side>
-                    <Level.Side align="right">
-                        <Level.Item>
-                            <Field kind="addons">
-                                <Control>
-                                    <Input placeholder="Find a recipe..." value="" readOnly />
-                                </Control>
-                                <Control>
-                                    <Button renderAs="button">
-                                        Search
+            <Element>
+                <Container className="pb-3">
+                    <Level renderAs="nav">
+                        <Level.Side align="left">
+                            <Level.Item>
+                                <Heading size={4}>
+                                    Recipes
+                            </Heading>
+                            </Level.Item>
+                        </Level.Side>
+                        <Level.Side align="right">
+                            <Level.Item>
+                                <Field kind="addons">
+                                    <Control>
+                                        <Input placeholder="Find a recipe..." value="" readOnly />
+                                    </Control>
+                                    <Control>
+                                        <Button renderAs="button">
+                                            Search
                                     </Button>
-                                </Control>
-                            </Field>
-                        </Level.Item><Level.Item>
-                            <Button to="/recipes/create" renderAs={Link} className="is-link">
-                                <Icon>
-                                    <FontAwesomeIcon icon={faPlus} />
-                                </Icon>
-                                <span>Add Recipe</span>
-                            </Button>
-                        </Level.Item>
-                    </Level.Side>
-                </Level>
-                {contents}
-            </div>
+                                    </Control>
+                                </Field>
+                            </Level.Item><Level.Item>
+                                <Button to="/recipes/create" renderAs={Link} className="is-success is-light">
+                                    <Icon>
+                                        <FontAwesomeIcon icon={faPlus} />
+                                    </Icon>
+                                    <span>Add Recipe</span>
+                                </Button>
+                            </Level.Item>
+                        </Level.Side>
+                    </Level>
+                </Container>
+                <Element>
+                    <Container>
+                        <Tabs className="is-size-7">
+                            <Tabs.Tab active>
+                                Date Added
+                        </Tabs.Tab>
+                        <Tabs.Tab>
+                                Name
+                        </Tabs.Tab>
+                        </Tabs>
+                    </Container>
+                    <Element className="has-background-white-bis">
+                        <Container>
+                            {contents}
+                        </Container>
+                    </Element>
+                </Element>
+            </Element>
         );
     }
 }

@@ -9,10 +9,10 @@ export class Layout extends Component {
     return (
       <Element>
         <Header />
-        <Section>
-          <BulmaContainer>
+        <Section className="px-0">
+          
             {this.props.children}
-          </BulmaContainer>
+          
         </Section>
       </Element>
     );

@@ -17,7 +17,7 @@ export const RecipeListTile = (props) => {
                     height="auto">
                 </Card.Image>
             </Link>
-            <Card.Content className="has-background-white-bis">
+            <Card.Content className="">
                 <p>{props.recipe.title}</p>
                 <Element className="buttons is-right">
                     <FavHeart recipe={props.recipe} />
