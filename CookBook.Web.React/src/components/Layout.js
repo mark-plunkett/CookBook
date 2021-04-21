@@ -10,9 +10,7 @@ export class Layout extends Component {
       <Element>
         <Header />
         <Section className="px-0">
-          
-            {this.props.children}
-          
+          {this.props.children}
         </Section>
       </Element>
     );

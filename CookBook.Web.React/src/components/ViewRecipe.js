@@ -7,6 +7,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faEdit } from '@fortawesome/free-solid-svg-icons'
 import { Container } from 'reactstrap';
 import { FavHeart } from './FavHeart';
+import { ParaSplitter } from './ParaSplitter';
 
 export class ViewRecipe extends Component {
 
@@ -47,6 +48,13 @@ export class ViewRecipe extends Component {
     }
 
     render() {
+        const fadedHR = {
+            width: '50%',
+            border: 0,
+            height: '1px',
+            backgroundImage: 'linear-gradient(to right, rgba(0,0,0,0.1), rgba(0,0,0,0))'
+        }
+
         return (
             <Element>
                 <Container>
@@ -55,7 +63,6 @@ export class ViewRecipe extends Component {
                             <h3>Recipe</h3>
                         </Level.Side>
                         <Level.Side align="right" className="buttons">
-
                             <Button to={'/recipes/edit/' + this.state.id} renderAs={Link} className="is-success is-light">
                                 <Icon>
                                     <FontAwesomeIcon icon={faEdit} />
@@ -63,14 +70,13 @@ export class ViewRecipe extends Component {
                                 <span>Edit</span>
                             </Button>
                             <FavHeart recipe={this.state} />
-
                         </Level.Side>
                     </Level>
                     <hr />
                     <Columns className="pt-5">
                         <Columns.Column size="two-thirds">
                             <Heading className="is-italic has-text-weight-normal" size={4}>{this.state.title}</Heading>
-                            <hr style={{ width: '50%' }} />
+                            <hr style={fadedHR} />
                             <p size={5} className="pt-3">{this.state.description}</p>
                         </Columns.Column>
                         <Columns.Column size="one-quarter" offset={1}>
@@ -80,7 +86,7 @@ export class ViewRecipe extends Component {
                     <Columns className="pt-3">
                         <Columns.Column size="two-thirds">
                             <h3 className="pb-3">How To:</h3>
-                            {this.state.instructions.split('\n').map((p, idx) => <p key={idx}>{p}</p>)}
+                            <ParaSplitter string={this.state.instructions} />
                         </Columns.Column>
                         <Columns.Column size="one-quarter" offset={1} className="has-background-light">
                             <Element className="has-text-centered">
@@ -88,11 +94,10 @@ export class ViewRecipe extends Component {
                                 <p className="is-size-7 has-text-grey">Serves {this.state.servings}</p>
                             </Element>
                             <Element className="px-3 has-text-grey">
-                                {this.state.ingredients.split('\n').map((p, idx) => <p key={idx}>{p}</p>)}
+                                <ParaSplitter string={this.state.ingredients} />
                             </Element>
                         </Columns.Column>
                     </Columns>
-
                 </Container>
             </Element>
         );
