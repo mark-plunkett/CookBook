@@ -12,6 +12,7 @@ export class Layout extends Component {
         <Section className="px-0">
           {this.props.children}
         </Section>
+        <Element></Element>
       </Element>
     );
   }

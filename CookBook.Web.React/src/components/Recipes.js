@@ -5,7 +5,7 @@ import { recipeStore } from '../models/recipes';
 import { RecipeListTile } from './RecipeListTile';
 import Icon from 'react-bulma-components/lib/components/icon';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faPlus } from '@fortawesome/free-solid-svg-icons'
+import { faPlus, faSearch, faSeedling } from '@fortawesome/free-solid-svg-icons'
 import _ from 'lodash';
 
 const { Input, Field, Control } = Form;
@@ -18,9 +18,11 @@ export class Recipes extends Component {
         this.state = {
             recipes: [],
             loading: true,
-            orderBy: 'createdOn'
+            orderBy: 'createdOn',
+            search: ''
         };
         this.setState = this.setState.bind(this)
+        this.handleChange = this.handleChange.bind(this);
         this.recipeSubscription$ = null;
     }
 
@@ -44,10 +46,23 @@ export class Recipes extends Component {
         });
     }
 
+    handleChange(event) {
+        const target = event.target;
+        const value = target.type === 'checkbox' ? target.checked : target.value;
+        const name = target.name;
+        this.setState({
+            [name]: value
+        });
+    }
+
     renderRecipes(recipes) {
-        const sorted = _.sortBy(recipes, [this.state.orderBy]);
+        const sorted =
+            _.chain(recipes)
+                .sortBy([this.state.orderBy])
+                .filter(r => r.title.toLowerCase().includes(this.state.search.toLowerCase()))
+                .value();
         return (
-            <Columns className="mt-0">
+            <Columns className="mt-0 pt-5">
                 {sorted.map(recipe =>
                     <Columns.Column key={recipe.id} size={3}>
                         <RecipeListTile key={recipe.id} recipe={recipe} />
@@ -70,13 +85,15 @@ export class Recipes extends Component {
                 <Level.Side align="right">
                     <Level.Item>
                         <Field kind="addons">
-                            <Control>
-                                <Input placeholder="Find a recipe..." value="" readOnly />
-                            </Control>
-                            <Control>
-                                <Button renderAs="button">
-                                    Search
-                                    </Button>
+                            <Control iconRight>
+                                <Input
+                                    placeholder="Find a recipe..."
+                                    value={this.state.search}
+                                    name="search"
+                                    onChange={this.handleChange} />
+                                <Icon align="right">
+                                    <FontAwesomeIcon icon={faSearch} className="is-success" />
+                                </Icon>
                             </Control>
                         </Field>
                     </Level.Item><Level.Item>
@@ -104,10 +121,10 @@ export class Recipes extends Component {
                     <Container>
                         <Tabs className="is-size-7">
                             <span className="is-italic mr-3">Sort by:</span>
-                            <Tabs.Tab active={this.state.orderBy == 'createdOn'} onClick={() => this.onTabSelected('createdOn')}>
+                            <Tabs.Tab active={this.state.orderBy === 'createdOn'} onClick={() => this.onTabSelected('createdOn')}>
                                 Date Added
                             </Tabs.Tab>
-                            <Tabs.Tab active={this.state.orderBy == 'title'} onClick={() => this.onTabSelected('title')}>
+                            <Tabs.Tab active={this.state.orderBy === 'title'} onClick={() => this.onTabSelected('title')}>
                                 Name
                             </Tabs.Tab>
                         </Tabs>
@@ -115,6 +132,11 @@ export class Recipes extends Component {
                     <Element className="has-background-white-bis">
                         <Container>
                             {contents}
+                            <Element style={{ width: '100%' }} className="has-text-centered my-5 py-5">
+                                <Icon className="has-text-success" style={{ width: '100px', height: '100px' }}>
+                                    <FontAwesomeIcon icon={faSeedling} style={{ width: '100%', height: '100%' }} />
+                                </Icon>
+                            </Element>
                         </Container>
                     </Element>
                 </Element>

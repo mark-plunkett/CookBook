@@ -1,5 +1,5 @@
 ﻿import React, { Component } from 'react';
-import { Button, Form } from 'react-bulma-components';
+import { Button, Container, Heading, Form } from 'react-bulma-components';
 import { updateRecipe, uploadFiles, recipeStore } from '../models/recipes';
 
 const { Input, Field, Control, Label, Textarea, InputFile } = Form;
@@ -43,8 +43,8 @@ export class EditRecipe extends Component {
 
     render() {
         return (
-            <div>
-                <h1>Edit Recipe '{this.state.title}'</h1>
+            <Container>
+                <Heading size={3}>Edit Recipe '{this.state.title}'</Heading>
                 <form onSubmit={this.handleSubmit}>
                     <Field>
                         <Control>
@@ -101,7 +101,7 @@ export class EditRecipe extends Component {
                     </Field>
                     <Button className="is-primary" onClick={this.handleSubmit}>Update</Button>
                 </form>
-            </div>
+            </Container>
         );
     }
 }

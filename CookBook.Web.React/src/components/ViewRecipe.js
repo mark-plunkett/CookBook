@@ -49,10 +49,9 @@ export class ViewRecipe extends Component {
 
     render() {
         const fadedHR = {
-            width: '50%',
             border: 0,
-            height: '1px',
-            backgroundImage: 'linear-gradient(to right, rgba(0,0,0,0.1), rgba(0,0,0,0))'
+            height: '2px',
+            backgroundImage: 'linear-gradient(to right, rgba(245,245,245,0.1), rgba(255,255,255,0.0))'
         }
 
         return (
@@ -60,7 +59,7 @@ export class ViewRecipe extends Component {
                 <Container>
                     <Level className="pt-5">
                         <Level.Side align="left">
-                            <h3>Recipe</h3>
+                            <Heading size={4}>Recipe</Heading>
                         </Level.Side>
                         <Level.Side align="right" className="buttons">
                             <Button to={'/recipes/edit/' + this.state.id} renderAs={Link} className="is-success is-light">
@@ -85,12 +84,12 @@ export class ViewRecipe extends Component {
                     </Columns>
                     <Columns className="pt-3">
                         <Columns.Column size="two-thirds">
-                            <h3 className="pb-3">How To:</h3>
+                            <Heading size={5} className="pb-3">How To:</Heading>
                             <ParaSplitter string={this.state.instructions} />
                         </Columns.Column>
                         <Columns.Column size="one-quarter" offset={1} className="has-background-light">
                             <Element className="has-text-centered">
-                                <h5>Ingredients</h5>
+                                <Heading size={6} className="mb-2">Ingredients</Heading>
                                 <p className="is-size-7 has-text-grey">Serves {this.state.servings}</p>
                             </Element>
                             <Element className="px-3 has-text-grey">

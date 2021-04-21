@@ -1,5 +1,5 @@
 ﻿import React, { Component } from 'react';
-import { Button, Form } from 'react-bulma-components';
+import { Button, Container, Heading, Form } from 'react-bulma-components';
 import { createRecipe, uploadFiles } from '../models/recipes';
 
 const { Input, Field, Control, Label, Textarea, InputFile } = Form;
@@ -46,8 +46,8 @@ export class CreateRecipe extends Component {
 
     render() {
         return (
-            <div>
-                <h1>Create Recipe</h1>
+            <Container>
+                <Heading size={3}>Create Recipe</Heading>
                 <form onSubmit={this.handleSubmit}>
                     <Field>
                         <Control>
@@ -104,7 +104,7 @@ export class CreateRecipe extends Component {
                     </Field>
                     <Button className="is-primary" onClick={this.handleSubmit}>Create</Button>
                 </form>
-            </div>
+            </Container>
         );
     }
 }
