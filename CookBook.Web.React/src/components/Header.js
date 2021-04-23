@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Container, Heading, Hero, Section } from 'react-bulma-components';
+import { Container, Heading, Hero } from 'react-bulma-components';
 import { Link } from 'react-router-dom';
 
 export class Header extends Component {

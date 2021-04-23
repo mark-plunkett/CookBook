@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Header } from './Header';
-import { Element, Section, Container as BulmaContainer } from 'react-bulma-components';
+import { Element, Section } from 'react-bulma-components';
 
 export class Layout extends Component {
   static displayName = Layout.name;

@@ -1,5 +1,5 @@
 ﻿import React, { Component } from 'react';
-import { Buttons, Button, Columns, Level, Element, Heading, Section, Image } from 'react-bulma-components';
+import { Button, Columns, Level, Element, Heading, Image } from 'react-bulma-components';
 import { recipeStore } from '../models/recipes';
 import { Link } from 'react-router-dom';
 import Icon from 'react-bulma-components/lib/components/icon';

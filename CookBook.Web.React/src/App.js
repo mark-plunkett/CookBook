@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Route } from 'react-router';
 import { Layout } from './components/Layout';
 
-import './custom.css'
+import './site.scss';
 import { Recipes } from './components/Recipes';
 import { CreateRecipe } from './components/CreateRecipe';
 import { EditRecipe } from './components/EditRecipe';

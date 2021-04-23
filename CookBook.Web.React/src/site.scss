@@ -1,0 +1,9 @@
+figure {
+  margin: 0;
+}
+
+@import '~bulma/sass/utilities/initial-variables';
+$tabs-boxed-link-active-background-color: $green;
+$tabs-link-active-color: $green;
+$tabs-link-active-border-bottom-color: $green;
+@import '~bulma';

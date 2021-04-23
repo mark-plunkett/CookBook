@@ -1,9 +1,6 @@
 import React from 'react';
-import { Button, Card, Element } from 'react-bulma-components';
+import { Card, Element } from 'react-bulma-components';
 import { Link } from 'react-router-dom';
-import Icon from 'react-bulma-components/lib/components/icon';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faEdit } from '@fortawesome/free-solid-svg-icons'
 import { FavHeart } from './FavHeart';
 
 export const RecipeListTile = (props) => {
