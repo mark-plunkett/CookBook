@@ -39,12 +39,13 @@ export class ViewRecipe extends Component {
 
     getImage() {
         if (!!this.state.id)
-            return (<Image
-                size="square"
-                src={process.env.REACT_APP_API_URL + 'recipes/' + this.state.id + '/primaryimage?width=480&height=480'}
-                width={480}
-                height="auto">
-            </Image>);
+            return (
+                <Image
+                    size="square"
+                    src={process.env.REACT_APP_API_URL + 'recipes/' + this.state.id + '/primaryimage?width=480&height=480'}
+                    width={480}
+                    height="auto">
+                </Image>);
     }
 
     render() {

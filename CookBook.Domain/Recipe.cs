@@ -1,5 +1,7 @@
 ﻿using CookBook.Domain.Commands;
 using CookBook.Domain.Events;
+using CookBook.Infrastructure;
+using MediatR;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -30,7 +32,7 @@ namespace CookBook.Domain
             }
         }
 
-        public void Create(
+        public Result<Unit> Create(
             Guid id,
             string title,
             string description,
@@ -45,7 +47,7 @@ namespace CookBook.Domain
                 throw new InvalidOperationException("Already created");
 
             if (string.IsNullOrWhiteSpace(title))
-                throw new ArgumentNullException(nameof(title));
+                return new Result<Unit>.Error(new BusinessError(nameof(Recipe.Title), "Recipe must have a title."));
 
             if (servings < 1)
                 throw new ArgumentOutOfRangeException(nameof(servings));
@@ -58,6 +60,8 @@ namespace CookBook.Domain
                 ingredients,
                 servings,
                 DateTime.UtcNow));
+
+            return new Result<Unit>.Success(Unit.Value);
         }
 
         public void Update(

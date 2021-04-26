@@ -1,6 +1,8 @@
 ﻿import React, { Component } from 'react';
 import { Button, Container, Heading, Form } from 'react-bulma-components';
 import { createRecipe, uploadFiles } from '../models/recipes';
+import { Form as FinalForm, Field as FinalField } from 'react-final-form';
+import { InputError } from './InputError';
 
 const { Input, Field, Control, Label, Textarea, InputFile } = Form;
 
@@ -38,72 +40,88 @@ export class CreateRecipe extends Component {
         });
     }
 
-    async handleSubmit(event) {
-        event.preventDefault();
-        await createRecipe(this.state);
-        this.props.history.push("/");
+    async handleSubmit() {
+        try {
+            await createRecipe(this.state);
+            this.props.history.push("/");
+        }
+        catch (e) {
+            if (e.response.status === 400)
+                return e.response.data;
+
+            throw e;
+        }
     }
 
     render() {
         return (
             <Container>
                 <Heading size={3}>Create Recipe</Heading>
-                <form onSubmit={this.handleSubmit}>
-                    <Field>
-                        <Control>
-                            <Label>Title</Label>
-                            <Input
-                                type="text"
-                                name="title"
-                                value={this.state.title}
-                                onChange={this.handleChange} />
-                        </Control>
-                    </Field>
-                    <Field>
-                        <Control>
-                            <Label>Number of servings</Label>
-                            <Input
-                                type="number"
-                                min="1"
-                                name="servings"
-                                value={this.state.servings}
-                                onChange={this.handleChange} />
-                        </Control>
-                    </Field>
-                    <Field>
-                        <Label>Pictures</Label>
-                        <InputFile name="pictures" boxed inputProps={{ multiple: true }} onChange={this.onFileChange}>
-                        </InputFile>
-                        </Field>
-                    <Field>
-                        <Label>Description</Label>
-                        <Control>
-                            <Textarea
-                                name="description"
-                                value={this.state.description}
-                                onChange={this.handleChange} />
-                        </Control>
-                    </Field>
-                    <Field>
-                        <Label>Instructions</Label>
-                        <Control>
-                            <Textarea
-                                name="instructions"
-                                value={this.state.instructions}
-                                onChange={this.handleChange} />
-                        </Control>
-                    </Field>
-                    <Field>
-                        <Label>Ingredients</Label>
-                        <Control>
-                            <Textarea
-                                name="ingredients"
-                                value={this.state.ingredients}
-                                onChange={this.handleChange} />
-                        </Control>
-                    </Field>
-                    <Button className="is-primary" onClick={this.handleSubmit}>Create</Button>
-                </form>
+                <FinalForm
+                    onSubmit={this.handleSubmit}
+                    render={({ handleSubmit }) => (
+                        <form onSubmit={handleSubmit}>
+                            <FinalField name="title">
+                                {({ meta }) => (
+                                    <Field>
+                                        <Control>
+                                            <Label>Title</Label>
+                                            <Input
+                                                type="text"
+                                                name="title"
+                                                value={this.state.title}
+                                                onChange={this.handleChange}
+                                                className={meta.submitError ? "is-danger" : ""} />
+                                        </Control>
+                                        { meta.submitError && <InputError errors={meta.submitError} /> }
+                                    </Field>
+                                )}
+                            </FinalField>
+                            <Field>
+                                <Control>
+                                    <Label>Number of servings</Label>
+                                    <Input
+                                        type="number"
+                                        min="1"
+                                        name="servings"
+                                        value={this.state.servings}
+                                        onChange={this.handleChange} />
+                                </Control>
+                            </Field>
+                            <Field>
+                                <Label>Pictures</Label>
+                                <InputFile name="pictures" boxed onChange={this.onFileChange} />
+                            </Field>
+                            <Field>
+                                <Label>Description</Label>
+                                <Control>
+                                    <Textarea
+                                        name="description"
+                                        value={this.state.description}
+                                        onChange={this.handleChange} />
+                                </Control>
+                            </Field>
+                            <Field>
+                                <Label>Instructions</Label>
+                                <Control>
+                                    <Textarea
+                                        name="instructions"
+                                        value={this.state.instructions}
+                                        onChange={this.handleChange} />
+                                </Control>
+                            </Field>
+                            <Field>
+                                <Label>Ingredients</Label>
+                                <Control>
+                                    <Textarea
+                                        name="ingredients"
+                                        value={this.state.ingredients}
+                                        onChange={this.handleChange} />
+                                </Control>
+                            </Field>
+                            <Button className="is-success" type="submit">Create</Button>
+                        </form>
+                    )} />
             </Container>
         );
     }

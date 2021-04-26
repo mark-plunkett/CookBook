@@ -1,4 +1,5 @@
-﻿using MediatR;
+﻿using CookBook.Infrastructure;
+using MediatR;
 using Raven.Client.Documents;
 using Raven.Client.Documents.Operations.Attachments;
 using System;
@@ -10,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace CookBook.Domain.Commands
 {
-    public class CreateRecipeCommandHandler : AsyncRequestHandler<CreateRecipeCommand>
+    public class CreateRecipeCommandHandler : IRequestHandler<CreateRecipeCommand, Result<Unit>>
     {
         private readonly IAggregateRepository aggregateRepository;
         private readonly IDocumentStore documentStore;
@@ -23,7 +24,9 @@ namespace CookBook.Domain.Commands
             this.documentStore = documentStore;
         }
 
-        protected override async Task Handle(CreateRecipeCommand request, CancellationToken cancellationToken)
+        async Task<Result<Unit>> IRequestHandler<CreateRecipeCommand, Result<Unit>>.Handle(
+            CreateRecipeCommand request, 
+            CancellationToken cancellationToken)
         {
             var id = Guid.NewGuid();
             var pictures = await MovePictureFiles(id, request.RecipeAlbumDocumentID);

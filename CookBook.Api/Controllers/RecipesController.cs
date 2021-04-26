@@ -37,8 +37,10 @@ namespace CookBook.Api.Controllers
         [HttpPost]
         public async Task<IActionResult> Create(CreateRecipeCommand command)
         {
-            await this.mediator.Send(command);
-            return Ok();
+            var result = await this.mediator.Send(command);
+            return result.Handle<IActionResult>(
+                success: _ => Ok(),
+                error: errors => BadRequest(ModelState.WithBusinessErrors(errors)));
         }
 
         [HttpPut]

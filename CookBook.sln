@@ -9,6 +9,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CookBook.Prototyping", "Coo
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CookBook.Api", "CookBook.Api\CookBook.Api.csproj", "{49C7AC14-3059-45A9-AAE8-C0EC62C3EDDE}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CookBook.Infrastructure", "CookBook.Infrastructure\CookBook.Infrastructure.csproj", "{CE8F4723-3168-41FD-BE74-348900184760}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,10 @@ Global
 		{49C7AC14-3059-45A9-AAE8-C0EC62C3EDDE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{49C7AC14-3059-45A9-AAE8-C0EC62C3EDDE}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{49C7AC14-3059-45A9-AAE8-C0EC62C3EDDE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CE8F4723-3168-41FD-BE74-348900184760}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CE8F4723-3168-41FD-BE74-348900184760}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CE8F4723-3168-41FD-BE74-348900184760}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CE8F4723-3168-41FD-BE74-348900184760}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
