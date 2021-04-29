@@ -1,5 +1,6 @@
 ﻿using CookBook.Domain.Commands;
 using CookBook.Domain.Events;
+using CookBook.Domain.Rules;
 using CookBook.Infrastructure;
 using MediatR;
 using System;
@@ -32,7 +33,7 @@ namespace CookBook.Domain
             }
         }
 
-        public Result<Unit> Create(
+        public void Create(
             Guid id,
             string title,
             string description,
@@ -40,17 +41,10 @@ namespace CookBook.Domain
             string ingredients,
             int servings)
         {
-            if (id == Guid.Empty)
-                throw new ArgumentNullException(nameof(id));
-
-            if (base.Version >= 0)
-                throw new InvalidOperationException("Already created");
-
-            if (string.IsNullOrWhiteSpace(title))
-                return new Result<Unit>.Error(new BusinessError(nameof(Recipe.Title), "Recipe must have a title."));
-
-            if (servings < 1)
-                throw new ArgumentOutOfRangeException(nameof(servings));
+            BusinessRule.Enforce(new IDMustBeNonDefaultRule(id));
+            BusinessRule.Enforce(new AggregateMustBeNewRule(base.Version));
+            BusinessRule.Enforce(new RecipeMustHaveATitleRule(title), nameof(title));
+            BusinessRule.Enforce(new RecipeMustServeAtLeastOneRule(servings), nameof(servings));
 
             base.Apply(new RecipeCreated(
                 id,
@@ -60,8 +54,6 @@ namespace CookBook.Domain
                 ingredients,
                 servings,
                 DateTime.UtcNow));
-
-            return new Result<Unit>.Success(Unit.Value);
         }
 
         public void Update(
@@ -71,11 +63,8 @@ namespace CookBook.Domain
             string ingredients,
             int servings)
         {
-            if (string.IsNullOrWhiteSpace(title))
-                throw new ArgumentNullException(nameof(title));
-
-            if (servings < 1)
-                throw new ArgumentOutOfRangeException(nameof(servings));
+            BusinessRule.Enforce(new RecipeMustHaveATitleRule(title), nameof(title));
+            BusinessRule.Enforce(new RecipeMustServeAtLeastOneRule(servings), nameof(servings));
 
             base.Apply(new RecipeUpdated(
                 base.ID,

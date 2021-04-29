@@ -1,4 +1,5 @@
-﻿using CookBook.Infrastructure;
+﻿using CookBook.Domain.Rules;
+using CookBook.Infrastructure;
 using MediatR;
 using Raven.Client.Documents;
 using Raven.Client.Documents.Operations.Attachments;
@@ -11,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace CookBook.Domain.Commands
 {
-    public class CreateRecipeCommandHandler : IRequestHandler<CreateRecipeCommand, Result<Unit>>
+    public class CreateRecipeCommandHandler : IRequestHandler<CreateRecipeCommand>
     {
         private readonly IAggregateRepository aggregateRepository;
         private readonly IDocumentStore documentStore;
@@ -24,26 +25,25 @@ namespace CookBook.Domain.Commands
             this.documentStore = documentStore;
         }
 
-        async Task<Result<Unit>> IRequestHandler<CreateRecipeCommand, Result<Unit>>.Handle(
-            CreateRecipeCommand request, 
-            CancellationToken cancellationToken)
+        public async Task<Unit> Handle(CreateRecipeCommand request, CancellationToken cancellationToken)
         {
+            BusinessRule.Enforce(new RecipeMustHaveAlbumRule(request.RecipeAlbumDocumentID), nameof(request.RecipeAlbumDocumentID));
+
             var id = Guid.NewGuid();
             var pictures = await MovePictureFiles(id, request.RecipeAlbumDocumentID);
-
-            var agg = await this.aggregateRepository.LoadAsync<Recipe>(id);
-            agg.Create(
+            var recipe = await this.aggregateRepository.LoadAsync<Recipe>(id);
+            recipe.Create(
                 id,
                 request.Title,
                 request.Description,
                 request.Instructions,
                 request.Ingredients,
                 request.Servings);
-
             foreach (var picture in pictures)
-                agg.AttachPicture(picture.Name);
+                recipe.AttachPicture(picture.Name);
 
-            await this.aggregateRepository.SaveAsync(agg);
+            await this.aggregateRepository.SaveAsync(recipe);
+            return Unit.Value;
         }
 
         private async Task<IEnumerable<AttachmentName>> MovePictureFiles(Guid recipeID, string albumDocumentID)

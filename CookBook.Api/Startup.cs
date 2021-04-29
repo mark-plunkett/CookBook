@@ -13,17 +13,21 @@ using Microsoft.Extensions.Hosting;
 using Raven.Client.Documents;
 using Raven.Client.Documents.Session;
 using System;
+using Hellang.Middleware.ProblemDetails;
+using CookBook.Infrastructure;
 
 namespace CookBook.Api
 {
     public class Startup
     {
-        public Startup(IConfiguration configuration)
+        public Startup(IConfiguration configuration, IWebHostEnvironment env)
         {
             Configuration = configuration;
+            Environment = env;
         }
 
         public IConfiguration Configuration { get; }
+        public IWebHostEnvironment Environment { get; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
@@ -40,6 +44,12 @@ namespace CookBook.Api
             services.AddHostedService<RecipeEventSubscriptionProcessor>();
 
             services.AddSignalR();
+
+            services.AddProblemDetails(options =>
+            {
+                options.IncludeExceptionDetails = (ctx, ex) => !Environment.IsDevelopment();
+                options.Map<BusinessRuleException>(ex => new BusinessRuleExceptionProblemDetails(ex));
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -62,6 +72,8 @@ namespace CookBook.Api
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
+
+            app.UseProblemDetails();
 
             app.UseHttpsRedirection();
             app.UseStaticFiles();

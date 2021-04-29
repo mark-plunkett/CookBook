@@ -1,10 +1,10 @@
 ﻿import React, { Component } from 'react';
-import { Button, Container, Heading, Form } from 'react-bulma-components';
+import { Button, Container, Heading, Form as form } from 'react-bulma-components';
 import { createRecipe, uploadFiles } from '../models/recipes';
 import { Form as FinalForm, Field as FinalField } from 'react-final-form';
 import { InputError } from './InputError';
 
-const { Input, Field, Control, Label, Textarea, InputFile } = Form;
+const { Input, Field, Control, Label, Textarea, InputFile } = form;
 
 export class CreateRecipe extends Component {
 
@@ -47,7 +47,11 @@ export class CreateRecipe extends Component {
         }
         catch (e) {
             if (e.response.status === 400)
-                return e.response.data;
+                return e.response.data.businessErrors.reduce((acc, v) => {
+                    if (!acc[v.propertyName]) acc[v.propertyName] = [v.message];
+                    else acc[v.propertyName].push(v.message);
+                    return acc;
+                }, {});
 
             throw e;
         }
@@ -73,7 +77,7 @@ export class CreateRecipe extends Component {
                                                 onChange={this.handleChange}
                                                 className={meta.submitError ? "is-danger" : ""} />
                                         </Control>
-                                        { meta.submitError && <InputError errors={meta.submitError} /> }
+                                        { meta.submitError && <InputError errors={meta.submitError} />}
                                     </Field>
                                 )}
                             </FinalField>
@@ -88,10 +92,15 @@ export class CreateRecipe extends Component {
                                         onChange={this.handleChange} />
                                 </Control>
                             </Field>
-                            <Field>
-                                <Label>Pictures</Label>
-                                <InputFile name="pictures" boxed onChange={this.onFileChange} />
-                            </Field>
+                            <FinalField name="recipeAlbumDocumentID">
+                                {({ meta }) => (
+                                    <Field>
+                                        <Label>Pictures</Label>
+                                        <InputFile name="pictures" boxed onChange={this.onFileChange} />
+                                        { meta.submitError && <InputError errors={meta.submitError} />}
+                                    </Field>
+                                )}
+                            </FinalField>
                             <Field>
                                 <Label>Description</Label>
                                 <Control>

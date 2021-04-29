@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace CookBook.Domain.Commands
 {
-    public class CreateRecipeCommand : IRequest<Result<Unit>>
+    public class CreateRecipeCommand : IRequest
     {
         public string Title { get; set; }
         public string Description { get; set; }
