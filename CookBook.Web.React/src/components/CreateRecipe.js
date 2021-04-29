@@ -8,6 +8,7 @@ import { IngredientsInput } from './RecipeForm/IngredientsInput';
 import { TitleInput } from './RecipeForm/TitleInput';
 import { DescriptionInput } from './RecipeForm/DescriptionInput';
 import { NumberOfServingsInput } from './RecipeForm/NumberOfServingsInput';
+import { mapErrorsToObject } from 'services/businessError';
 
 const { Input, Field, Control, Label, Textarea, InputFile } = Form;
 
@@ -52,11 +53,7 @@ export class CreateRecipe extends Component {
         }
         catch (e) {
             if (e.response.status === 400)
-                return e.response.data.businessErrors.reduce((acc, v) => {
-                    if (!acc[v.propertyName]) acc[v.propertyName] = [v.message];
-                    else acc[v.propertyName].push(v.message);
-                    return acc;
-                }, {});
+                return mapErrorsToObject(e.response.data.businessErrors);
 
             throw e;
         }

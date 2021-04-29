@@ -8,6 +8,7 @@ import { DescriptionInput } from './RecipeForm/DescriptionInput';
 import { NumberOfServingsInput } from './RecipeForm/NumberOfServingsInput';
 
 import { Form as FinalForm } from 'react-final-form';
+import { mapErrorsToObject } from 'services/businessError';
 
 export class EditRecipe extends Component {
 
@@ -32,14 +33,6 @@ export class EditRecipe extends Component {
         });
     }
 
-    onFileChange = async event => {
-        const recipeAlbumDocumentID = await uploadFiles(event.target.files);
-        this.setState({
-            ...this.state,
-            recipeAlbumDocumentID: recipeAlbumDocumentID
-        });
-    }
-
     async handleSubmit() {
         try {
             await updateRecipe(this.state);
@@ -47,11 +40,9 @@ export class EditRecipe extends Component {
         }
         catch (e) {
             if (e.response.status === 400)
-                return e.response.data.businessErrors.reduce((acc, v) => {
-                    if (!acc[v.propertyName]) acc[v.propertyName] = [v.message];
-                    else acc[v.propertyName].push(v.message);
-                    return acc;
-                }, {});
+                return mapErrorsToObject(e.response.data.businessErrors);
+
+            throw e;
         }
     }
 
