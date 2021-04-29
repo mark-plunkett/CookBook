@@ -1,8 +1,13 @@
 ﻿import React, { Component } from 'react';
 import { Button, Container, Heading, Form } from 'react-bulma-components';
 import { updateRecipe, uploadFiles, recipeStore } from '../models/recipes';
+import { InstructionsInput } from './RecipeForm/InstructionsInput';
+import { IngredientsInput } from './RecipeForm/IngredientsInput';
+import { TitleInput } from './RecipeForm/TitleInput';
+import { DescriptionInput } from './RecipeForm/DescriptionInput';
+import { NumberOfServingsInput } from './RecipeForm/NumberOfServingsInput';
 
-const { Input, Field, Control, Label, Textarea, InputFile } = Form;
+import { Form as FinalForm } from 'react-final-form';
 
 export class EditRecipe extends Component {
 
@@ -35,72 +40,37 @@ export class EditRecipe extends Component {
         });
     }
 
-    async handleSubmit(event) {
-        event.preventDefault();
-        await updateRecipe(this.state);
-        this.props.history.push("/recipes/view/" + this.state.id);
+    async handleSubmit() {
+        try {
+            await updateRecipe(this.state);
+            this.props.history.push("/");
+        }
+        catch (e) {
+            if (e.response.status === 400)
+                return e.response.data.businessErrors.reduce((acc, v) => {
+                    if (!acc[v.propertyName]) acc[v.propertyName] = [v.message];
+                    else acc[v.propertyName].push(v.message);
+                    return acc;
+                }, {});
+        }
     }
 
     render() {
         return (
             <Container>
                 <Heading size={3}>Edit Recipe '{this.state.title}'</Heading>
-                <form onSubmit={this.handleSubmit}>
-                    <Field>
-                        <Control>
-                            <Label>Title</Label>
-                            <Input
-                                type="text"
-                                name="title"
-                                value={this.state.title}
-                                onChange={this.handleChange} />
-                        </Control>
-                    </Field>
-                    <Field>
-                        <Control>
-                            <Label>Number of servings</Label>
-                            <Input
-                                type="number"
-                                min="1"
-                                name="servings"
-                                value={this.state.servings}
-                                onChange={this.handleChange} />
-                        </Control>
-                    </Field>
-                    <Field>
-                        <Label>Pictures</Label>
-                        <InputFile name="pictures" boxed inputProps={{ multiple: true }} onChange={this.onFileChange}>
-                        </InputFile>
-                    </Field>
-                    <Field>
-                        <Label>Description</Label>
-                        <Control>
-                            <Textarea
-                                name="description"
-                                value={this.state.description}
-                                onChange={this.handleChange} />
-                        </Control>
-                    </Field>
-                    <Field>
-                        <Label>Instructions</Label>
-                        <Control>
-                            <Textarea
-                                name="instructions"
-                                value={this.state.instructions}
-                                onChange={this.handleChange} />
-                        </Control>
-                    </Field>
-                    <Field>
-                        <Label>Ingredients</Label>
-                        <Control>
-                            <Textarea
-                                name="ingredients"
-                                value={this.state.ingredients}
-                                onChange={this.handleChange} />
-                        </Control>
-                    </Field>
-                    <Button className="is-primary" onClick={this.handleSubmit}>Update</Button>
-                </form>
+                <FinalForm
+                    onSubmit={this.handleSubmit}
+                    render={({ handleSubmit }) => (
+                        <form onSubmit={handleSubmit}>
+                            <TitleInput title={this.state.title} handleChange={this.handleChange} />
+                            <NumberOfServingsInput servings={this.state.servings} handleChange={this.handleChange} />
+                            <DescriptionInput description={this.state.description} handleChange={this.handleChange} />
+                            <InstructionsInput instructions={this.state.instructions} handleChange={this.handleChange} />
+                            <IngredientsInput ingredients={this.state.ingredients} handleChange={this.handleChange} />
+                            <Button className="is-success" type="submit">Update</Button>
+                        </form>
+                    )} />
             </Container>
         );
     }

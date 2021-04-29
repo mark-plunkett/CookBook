@@ -1,10 +1,15 @@
 ﻿import React, { Component } from 'react';
-import { Button, Container, Heading, Form as form } from 'react-bulma-components';
+import { Button, Container, Heading, Form } from 'react-bulma-components';
 import { createRecipe, uploadFiles } from '../models/recipes';
 import { Form as FinalForm, Field as FinalField } from 'react-final-form';
 import { InputError } from './InputError';
+import { InstructionsInput } from './RecipeForm/InstructionsInput';
+import { IngredientsInput } from './RecipeForm/IngredientsInput';
+import { TitleInput } from './RecipeForm/TitleInput';
+import { DescriptionInput } from './RecipeForm/DescriptionInput';
+import { NumberOfServingsInput } from './RecipeForm/NumberOfServingsInput';
 
-const { Input, Field, Control, Label, Textarea, InputFile } = form;
+const { Input, Field, Control, Label, Textarea, InputFile } = Form;
 
 export class CreateRecipe extends Component {
 
@@ -65,33 +70,8 @@ export class CreateRecipe extends Component {
                     onSubmit={this.handleSubmit}
                     render={({ handleSubmit }) => (
                         <form onSubmit={handleSubmit}>
-                            <FinalField name="title">
-                                {({ meta }) => (
-                                    <Field>
-                                        <Control>
-                                            <Label>Title</Label>
-                                            <Input
-                                                type="text"
-                                                name="title"
-                                                value={this.state.title}
-                                                onChange={this.handleChange}
-                                                className={meta.submitError ? "is-danger" : ""} />
-                                        </Control>
-                                        { meta.submitError && <InputError errors={meta.submitError} />}
-                                    </Field>
-                                )}
-                            </FinalField>
-                            <Field>
-                                <Control>
-                                    <Label>Number of servings</Label>
-                                    <Input
-                                        type="number"
-                                        min="1"
-                                        name="servings"
-                                        value={this.state.servings}
-                                        onChange={this.handleChange} />
-                                </Control>
-                            </Field>
+                            <TitleInput title={this.state.title} handleChange={this.handleChange} />
+                            <NumberOfServingsInput servings={this.state.servings} handleChange={this.handleChange} />
                             <FinalField name="recipeAlbumDocumentID">
                                 {({ meta }) => (
                                     <Field>
@@ -101,33 +81,9 @@ export class CreateRecipe extends Component {
                                     </Field>
                                 )}
                             </FinalField>
-                            <Field>
-                                <Label>Description</Label>
-                                <Control>
-                                    <Textarea
-                                        name="description"
-                                        value={this.state.description}
-                                        onChange={this.handleChange} />
-                                </Control>
-                            </Field>
-                            <Field>
-                                <Label>Instructions</Label>
-                                <Control>
-                                    <Textarea
-                                        name="instructions"
-                                        value={this.state.instructions}
-                                        onChange={this.handleChange} />
-                                </Control>
-                            </Field>
-                            <Field>
-                                <Label>Ingredients</Label>
-                                <Control>
-                                    <Textarea
-                                        name="ingredients"
-                                        value={this.state.ingredients}
-                                        onChange={this.handleChange} />
-                                </Control>
-                            </Field>
+                            <DescriptionInput description={this.state.description} handleChange={this.handleChange} />
+                            <InstructionsInput instructions={this.state.instructions} handleChange={this.handleChange} />
+                            <IngredientsInput ingredients={this.state.ingredients} handleChange={this.handleChange} />
                             <Button className="is-success" type="submit">Create</Button>
                         </form>
                     )} />
