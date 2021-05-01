@@ -1,6 +1,6 @@
 ﻿import React, { Component } from 'react';
-import { Button, Container, Heading, Form } from 'react-bulma-components';
-import { updateRecipe, uploadFiles, recipeStore } from '../models/recipes';
+import { Button, Container, Heading } from 'react-bulma-components';
+import { updateRecipe, recipeStore } from '../models/recipes';
 import { InstructionsInput } from './RecipeForm/InstructionsInput';
 import { IngredientsInput } from './RecipeForm/IngredientsInput';
 import { TitleInput } from './RecipeForm/TitleInput';

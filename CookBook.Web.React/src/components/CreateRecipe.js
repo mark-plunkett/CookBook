@@ -10,7 +10,7 @@ import { DescriptionInput } from './RecipeForm/DescriptionInput';
 import { NumberOfServingsInput } from './RecipeForm/NumberOfServingsInput';
 import { mapErrorsToObject } from 'services/businessError';
 
-const { Input, Field, Control, Label, Textarea, InputFile } = Form;
+const { Field, Label, InputFile } = Form;
 
 export class CreateRecipe extends Component {
 

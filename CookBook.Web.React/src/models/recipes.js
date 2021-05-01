@@ -78,7 +78,11 @@ export const recipeStore = {
     }
 };
 
-const hub = new HubConnectionBuilder().withUrl(process.env.REACT_APP_API_URL + "recipeHub").build();
+const hub = new HubConnectionBuilder()
+    .withUrl(process.env.REACT_APP_API_URL + "recipeHub")
+    .withAutomaticReconnect()
+    .build();
+
 hub.on("RecipeCreated", function (r) {
     recipeStore.appendRecipe(r);
 });

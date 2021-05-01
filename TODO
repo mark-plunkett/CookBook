@@ -1,6 +1,8 @@
 Todos:
   ✔ Form validation @done(21-04-29 19:49)
   ☐ Convert React frontend to typescript
+  ☐ Integration testing
+  ☐ SignalR auto reconnect
   ☐ Check out React Native, perhaps copy or convert existing frontend to this?
   ☐ Implement VueJs frontend
   ☐ Recipe tags
