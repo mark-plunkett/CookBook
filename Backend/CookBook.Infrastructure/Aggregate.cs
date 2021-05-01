@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 
-namespace CookBook.Domain
+namespace CookBook.Infrastructure
 {
     public abstract class Aggregate
     {

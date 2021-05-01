@@ -6,7 +6,7 @@ using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
 
-namespace CookBook.Domain
+namespace CookBook.Infrastructure
 {
     public class AggregateRepository : IAggregateRepository
     {
@@ -19,23 +19,21 @@ namespace CookBook.Domain
 
         public async Task SaveAsync<T>(T aggregate) where T : Aggregate, new()
         {
-            var events = aggregate.GetChanges()
-                .Select(@event => new EventData(
+            var events = aggregate
+                .GetChanges()
+                .Select(e => new EventData(
                     Guid.NewGuid(),
-                    @event.GetType().Name,
+                    e.GetType().Name,
                     true,
-                    Encoding.UTF8.GetBytes(JsonSerializer.Serialize((object)@event)),
-                    Encoding.UTF8.GetBytes(@event.GetType().FullName)))
+                    Encoding.UTF8.GetBytes(JsonSerializer.Serialize((object)e)),
+                    Encoding.UTF8.GetBytes(e.GetType().FullName!)))
                 .ToArray();
 
             if (!events.Any())
-            {
                 return;
-            }
 
             var streamName = GetStreamName(aggregate, aggregate.ID);
-
-            var result = await eventStore.AppendToStreamAsync(streamName, ExpectedVersion.Any, events);
+            await eventStore.AppendToStreamAsync(streamName, aggregate.Version, events);
         }
 
         public async Task<T> LoadAsync<T>(Guid aggregateId) where T : Aggregate, new()
@@ -57,7 +55,11 @@ namespace CookBook.Domain
                     aggregate.Load(
                         page.Events.Last().Event.EventNumber,
                         page.Events
-                            .Select(e => new BaseEvent(e.OriginalEvent.EventNumber, JsonSerializer.Deserialize(Encoding.UTF8.GetString(e.OriginalEvent.Data), Type.GetType(Encoding.UTF8.GetString(e.OriginalEvent.Metadata))) as IDomainEvent))
+                            .Select(e => new BaseEvent(
+                                e.OriginalEvent.EventNumber,
+                                (IDomainEvent)JsonSerializer.Deserialize(
+                                    Encoding.UTF8.GetString(e.OriginalEvent.Data),
+                                    Type.GetType($"{Encoding.UTF8.GetString(e.OriginalEvent.Metadata)},{typeof(T).Assembly.FullName}")!)!))
                             .ToArray());
                 }
 
@@ -67,6 +69,6 @@ namespace CookBook.Domain
             return aggregate;
         }
 
-        private string GetStreamName<T>(T type, Guid aggregateId) => $"{type.GetType().Name}-{aggregateId}";
+        private string GetStreamName<T>(T type, Guid aggregateId) where T : Aggregate, new() => $"{type.GetType().Name}-{aggregateId}";
     }
 }

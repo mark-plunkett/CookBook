@@ -108,7 +108,12 @@ namespace CookBook.Api
 
         private void ConfigureMediatR(IServiceCollection services)
         {
-            var assemblies = new[] { typeof(Startup).Assembly, typeof(IDomainEvent).Assembly };
+            var assemblies = new[] 
+            {
+                typeof(Startup).Assembly,
+                typeof(IDomainEvent).Assembly,
+                typeof(Recipe).Assembly
+            };
             services.AddMediatR(assemblies);
         }
 

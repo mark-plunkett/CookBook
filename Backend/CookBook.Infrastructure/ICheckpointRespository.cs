@@ -1,7 +1,7 @@
 ﻿using EventStore.ClientAPI;
 using System.Threading.Tasks;
 
-namespace CookBook.Domain
+namespace CookBook.Infrastructure
 {
     public interface ICheckpointRespository
     {

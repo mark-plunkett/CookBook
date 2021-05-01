@@ -1,4 +1,5 @@
-﻿using MediatR;
+﻿using CookBook.Infrastructure;
+using MediatR;
 using Raven.Client.Documents;
 using Raven.Client.Documents.Operations.Attachments;
 using Raven.Client.Documents.Session;

@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace CookBook.Domain
+namespace CookBook.Infrastructure
 {
-    public record BaseEvent(long Version, IDomainEvent Event)
+    public interface IDomainEvent
     {
     }
 }

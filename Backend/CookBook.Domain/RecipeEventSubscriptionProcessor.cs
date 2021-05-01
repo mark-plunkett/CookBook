@@ -1,4 +1,5 @@
 ﻿using CookBook.Domain.Events;
+using CookBook.Infrastructure;
 using EventStore.ClientAPI;
 using EventStore.ClientAPI.Exceptions;
 using MediatR;

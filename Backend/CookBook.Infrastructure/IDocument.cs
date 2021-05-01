@@ -1,4 +1,4 @@
-﻿namespace CookBook.Domain
+﻿namespace CookBook.Infrastructure
 {
     public interface IDocument
     {

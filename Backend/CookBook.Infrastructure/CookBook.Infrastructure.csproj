@@ -9,4 +9,9 @@
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
   </PropertyGroup>
 
+  <ItemGroup>
+    <PackageReference Include="EventStore.Client" Version="21.2.0" />
+    <PackageReference Include="RavenDB.Client" Version="5.1.5" />
+  </ItemGroup>
+
 </Project>
