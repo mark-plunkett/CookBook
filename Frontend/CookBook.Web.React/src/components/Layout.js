@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Header } from './Header';
-import { Element, Section, Container } from 'react-bulma-components';
+import { Element } from 'react-bulma-components';
 import { Footer } from './Footer';
 
 export class Layout extends Component {
