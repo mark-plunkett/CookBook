@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Header } from './Header';
-import { Element, Section } from 'react-bulma-components';
+import { Element, Section, Container } from 'react-bulma-components';
+import { Footer } from './Footer';
 
 export class Layout extends Component {
   static displayName = Layout.name;
@@ -9,10 +10,10 @@ export class Layout extends Component {
     return (
       <Element>
         <Header />
-        <Section className="px-0">
+        <Element className="mt-5 pt-5">
           {this.props.children}
-        </Section>
-        <Element></Element>
+        </Element>
+        <Footer />
       </Element>
     );
   }

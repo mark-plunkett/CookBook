@@ -13,12 +13,21 @@ const { Input, Field, Control } = Form;
 export class Recipes extends Component {
     static displayName = Recipes.name;
 
+
     constructor(props) {
         super(props);
+        this.sortOptions = {
+            newest: {
+                field: 'createdOn', order: 'desc'
+            },
+            name: {
+                field: 'title', order: 'asc'
+            }
+        }
         this.state = {
             recipes: [],
             loading: true,
-            orderBy: 'createdOn',
+            orderBy: this.sortOptions.newest,
             search: ''
         };
         this.setState = this.setState.bind(this)
@@ -58,7 +67,7 @@ export class Recipes extends Component {
     renderRecipes(recipes) {
         const sorted =
             _.chain(recipes)
-                .sortBy([this.state.orderBy])
+                .orderBy([this.state.orderBy.field], [this.state.orderBy.order])
                 .filter(r => r.title.toLowerCase().includes(this.state.search.toLowerCase()))
                 .value();
         return (
@@ -121,10 +130,10 @@ export class Recipes extends Component {
                     <Container>
                         <Tabs className="is-size-7">
                             <span className="is-italic mr-3">Sort by:</span>
-                            <Tabs.Tab active={this.state.orderBy === 'createdOn'} onClick={() => this.onTabSelected('createdOn')}>
-                                Date Added
+                            <Tabs.Tab active={this.state.orderBy.field === this.sortOptions.newest.field} onClick={() => this.onTabSelected(this.sortOptions.newest)}>
+                                Newest
                             </Tabs.Tab>
-                            <Tabs.Tab active={this.state.orderBy === 'title'} onClick={() => this.onTabSelected('title')}>
+                            <Tabs.Tab active={this.state.orderBy.field === this.sortOptions.name.field} onClick={() => this.onTabSelected(this.sortOptions.name)}>
                                 Name
                             </Tabs.Tab>
                         </Tabs>
