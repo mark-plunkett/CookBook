@@ -1,4 +1,4 @@
-using CookBook.Domain;
+using CookBook.Domain.Recipes;
 using CookBook.Api.Sync;
 using EventStore.ClientAPI;
 using MediatR;

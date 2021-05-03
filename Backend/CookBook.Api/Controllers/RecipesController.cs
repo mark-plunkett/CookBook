@@ -1,7 +1,7 @@
-﻿using CookBook.Domain;
-using CookBook.Domain.Commands;
-using CookBook.Domain.Projections;
-using CookBook.Domain.Projections.RecipeList;
+﻿using CookBook.Domain.Recipes;
+using CookBook.Domain.Recipes.Commands;
+using CookBook.Domain.Recipes.Projections;
+using CookBook.Domain.Recipes.Projections.RecipeList;
 using EventStore.ClientAPI;
 using MediatR;
 using Microsoft.AspNetCore.Http;

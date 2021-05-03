@@ -1,4 +1,4 @@
-﻿using CookBook.Domain;
+﻿using CookBook.Domain.Recipes;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
 using System;

@@ -43,7 +43,6 @@ namespace CookBook.Infrastructure
 
             var aggregate = new T();
             var streamName = GetStreamName(aggregate, aggregateId);
-
             var nextPageStart = 0L;
 
             do
@@ -57,9 +56,7 @@ namespace CookBook.Infrastructure
                         page.Events
                             .Select(e => new BaseEvent(
                                 e.OriginalEvent.EventNumber,
-                                (IDomainEvent)JsonSerializer.Deserialize(
-                                    Encoding.UTF8.GetString(e.OriginalEvent.Data),
-                                    Type.GetType($"{Encoding.UTF8.GetString(e.OriginalEvent.Metadata)},{typeof(T).Assembly.FullName}")!)!))
+                                DeserializeEvent<T>(e)))
                             .ToArray());
                 }
 
@@ -67,6 +64,13 @@ namespace CookBook.Infrastructure
             } while (nextPageStart != -1);
 
             return aggregate;
+        }
+
+        private IDomainEvent DeserializeEvent<T>(ResolvedEvent e) where T : Aggregate, new()
+        {
+            return (IDomainEvent)JsonSerializer.Deserialize(
+                Encoding.UTF8.GetString(e.OriginalEvent.Data),
+                Type.GetType($"{Encoding.UTF8.GetString(e.OriginalEvent.Metadata)}, {typeof(T).Assembly.FullName}")!)!;
         }
 
         private string GetStreamName<T>(T type, Guid aggregateId) where T : Aggregate, new() => $"{type.GetType().Name}-{aggregateId}";

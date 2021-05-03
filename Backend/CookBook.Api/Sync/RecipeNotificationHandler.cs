@@ -1,5 +1,5 @@
-﻿using CookBook.Domain;
-using CookBook.Domain.Events;
+﻿using CookBook.Domain.Recipes;
+using CookBook.Domain.Recipes.Events;
 using MediatR;
 using Microsoft.AspNetCore.SignalR;
 using System;

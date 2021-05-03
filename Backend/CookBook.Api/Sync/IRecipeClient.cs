@@ -1,4 +1,4 @@
-﻿using CookBook.Domain;
+﻿using CookBook.Domain.Recipes;
 using System.Threading.Tasks;
 
 namespace CookBook.Api.Sync
