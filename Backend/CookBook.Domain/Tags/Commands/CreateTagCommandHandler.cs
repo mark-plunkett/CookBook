@@ -19,7 +19,8 @@ namespace CookBook.Domain.Tags.Commands
         {
             var id = Guid.NewGuid();
             var tag = await this.aggregateRepository.LoadAsync<Tag>(id);
-            tag.Create(request.Name);
+            tag.Create(id, request.Name);
+            await this.aggregateRepository.SaveAsync(tag);
             return Unit.Value;
         }
     }

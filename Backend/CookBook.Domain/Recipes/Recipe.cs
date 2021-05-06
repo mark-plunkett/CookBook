@@ -1,6 +1,7 @@
 ﻿using CookBook.Domain.Recipes.Commands;
 using CookBook.Domain.Recipes.Events;
 using CookBook.Domain.Recipes.Rules;
+using CookBook.Domain.Rules;
 using CookBook.Infrastructure;
 using MediatR;
 using System;

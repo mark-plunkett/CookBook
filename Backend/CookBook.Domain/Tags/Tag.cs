@@ -1,5 +1,6 @@
 
 using System;
+using CookBook.Domain.Rules;
 using CookBook.Infrastructure;
 
 namespace CookBook.Domain.Tags
@@ -17,16 +18,18 @@ namespace CookBook.Domain.Tags
             };
         }
 
-        public void Create(string name)
+        public void Create(Guid id, string name)
         {
+            BusinessRule.Enforce(new IDMustBeNonDefaultRule(id));
             var trimmed = name.Trim();
             BusinessRule.Enforce(new TagMustHaveNameRule(trimmed));
 
-            base.Apply(new TagCreated(trimmed, trimmed.Canonicalize()));
+            base.Apply(new TagCreated(id, trimmed, trimmed.Canonicalize()));
         }
 
         public void OnCreated(TagCreated e)
         {
+            base.ID = e.TagID;
             this.Name = e.Name;
             this.Canonicalized = e.CanonicalizedName;
         }

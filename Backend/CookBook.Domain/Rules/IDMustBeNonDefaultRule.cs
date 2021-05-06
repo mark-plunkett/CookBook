@@ -1,7 +1,7 @@
 using System;
 using CookBook.Infrastructure;
 
-namespace CookBook.Domain.Recipes.Rules
+namespace CookBook.Domain.Rules
 {
     public class IDMustBeNonDefaultRule : IBusinessRule
     {
