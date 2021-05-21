@@ -33,9 +33,6 @@ export const tagStore = {
     },
     subscribe: setState => subject.subscribe(setState),
     list: async () => {
-        if (!state.initialized)
-            await initialize();
-
-        return state.tags;
+        return await fetchTags();
     }
 };

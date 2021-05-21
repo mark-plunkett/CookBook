@@ -26,7 +26,7 @@ namespace CookBook.Domain.Recipes.Commands
         protected override async Task Handle(UpdateRecipeCommand request, CancellationToken cancellationToken)
         {
             var canonicalized = request.Tags.Select(StringExtensions.Canonicalize);
-            var tags = await this.tagRepo.CreateTags(canonicalized);
+            var tags = await this.tagRepo.CreateTags(request.Tags);
             var recipe = await this.aggregateRepository.LoadAsync<Recipe>(request.ID);
             recipe.Update(
                 request.Title,

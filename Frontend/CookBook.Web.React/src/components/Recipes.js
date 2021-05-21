@@ -137,16 +137,9 @@ export class Recipes extends Component {
                             </Tabs.Tab>
                         </Tabs>
                     </Container>
-                    <Element className="has-background-white-bis">
-                        <Container>
-                            {contents}
-                            <Element style={{ width: '100%' }} className="has-text-centered my-5 py-5">
-                                <Icon className="has-text-success" style={{ width: '100px', height: '100px' }}>
-                                    <FontAwesomeIcon icon={faSeedling} style={{ width: '100%', height: '100%' }} />
-                                </Icon>
-                            </Element>
-                        </Container>
-                    </Element>
+                    <Container>
+                        {contents}
+                    </Container>
                 </Element>
             </Element>
         );
