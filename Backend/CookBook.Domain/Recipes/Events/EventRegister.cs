@@ -13,7 +13,9 @@ namespace CookBook.Domain.Recipes.Events
             typeof(RecipeCreated),
             typeof(RecipeUpdated),
             typeof(RecipeFavourited),
-            typeof(RecipePictureAttached)
+            typeof(RecipePictureAttached),
+            typeof(RecipeTagged),
+            typeof(RecipeUntagged)
         });
     }
 }

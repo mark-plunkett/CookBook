@@ -11,10 +11,7 @@ namespace CookBook.Infrastructure
 
         public Guid ID { get; protected set; } = Guid.Empty;
         public long Version { get; private set; } = -1;
-        public string DocumentID => GetDocumentID(this.GetType(), this.ID);
-
-        public static string GetDocumentID(Type type, Guid id) => $"{type.Name}-{id}";
-        public static string GetDocumentID<TAggregate>(Guid id) where TAggregate : Aggregate => GetDocumentID(typeof(TAggregate), id);
+        public string DocumentID => this.GetDocumentID(this.ID);
 
         protected abstract void When(IDomainEvent @event);
 

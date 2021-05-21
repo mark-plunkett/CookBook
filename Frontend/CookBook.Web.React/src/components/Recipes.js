@@ -13,7 +13,6 @@ const { Input, Field, Control } = Form;
 export class Recipes extends Component {
     static displayName = Recipes.name;
 
-
     constructor(props) {
         super(props);
         this.sortOptions = {

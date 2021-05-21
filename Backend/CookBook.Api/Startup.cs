@@ -15,6 +15,7 @@ using Raven.Client.Documents.Session;
 using System;
 using Hellang.Middleware.ProblemDetails;
 using CookBook.Infrastructure;
+using CookBook.Domain.Tags;
 
 namespace CookBook.Api
 {
@@ -36,6 +37,7 @@ namespace CookBook.Api
 
             ConfigureEventStore(services);
             services.AddTransient<IAggregateRepository, AggregateRepository>();
+            services.AddTransient<ITagRepo, TagRepo>();
 
             ConfigureRavenDB(services);
 

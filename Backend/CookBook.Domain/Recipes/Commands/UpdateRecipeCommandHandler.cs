@@ -1,4 +1,5 @@
-﻿using CookBook.Infrastructure;
+﻿using CookBook.Domain.Tags;
+using CookBook.Infrastructure;
 using MediatR;
 using System;
 using System.Collections.Generic;
@@ -12,24 +13,35 @@ namespace CookBook.Domain.Recipes.Commands
     public class UpdateRecipeCommandHandler : AsyncRequestHandler<UpdateRecipeCommand>
     {
         private readonly IAggregateRepository aggregateRepository;
+        private readonly ITagRepo tagRepo;
 
         public UpdateRecipeCommandHandler(
-            IAggregateRepository aggregateRepository)
+            IAggregateRepository aggregateRepository,
+            ITagRepo tagRepo)
         {
             this.aggregateRepository = aggregateRepository;
+            this.tagRepo = tagRepo;
         }
 
         protected override async Task Handle(UpdateRecipeCommand request, CancellationToken cancellationToken)
         {
-            var agg = await this.aggregateRepository.LoadAsync<Recipe>(request.ID);
-            agg.Update(
+            var canonicalized = request.Tags.Select(StringExtensions.Canonicalize);
+            var tags = await this.tagRepo.CreateTags(canonicalized);
+            var recipe = await this.aggregateRepository.LoadAsync<Recipe>(request.ID);
+            recipe.Update(
                 request.Title,
                 request.Description,
                 request.Instructions,
                 request.Ingredients,
                 request.Servings);
 
-            await this.aggregateRepository.SaveAsync(agg);
+            foreach (var tag in tags)
+                recipe.Tag(tag.Canonicalized);
+            
+            foreach (var removedTag in recipe.Tags.Except(canonicalized).ToList())
+                recipe.Untag(removedTag);
+            
+            await this.aggregateRepository.SaveAsync(recipe);
         }
     }
 }

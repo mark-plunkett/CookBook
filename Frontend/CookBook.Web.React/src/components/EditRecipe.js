@@ -9,19 +9,33 @@ import { NumberOfServingsInput } from './RecipeForm/NumberOfServingsInput';
 
 import { Form as FinalForm } from 'react-final-form';
 import { mapErrorsToObject } from 'services/businessError';
+import { TagsInput } from './RecipeForm/TagsInput';
+import { tagStore } from 'models/tags';
 
 export class EditRecipe extends Component {
 
     constructor(props) {
         super(props);
         this.id = props.match.params.id;
-        this.state = {};
+        this.state = {
+            recipeTags: [],
+            suggestedTags: []
+        };
         this.handleChange = this.handleChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
+        this.setTags = this.setTags.bind(this);
     }
 
     async componentDidMount() {
-        this.setState(await recipeStore.get(this.id));
+        let allTags = await tagStore.list();
+        allTags = allTags.map(tag => { return { id: tag.canonicalized, name: tag.name }});
+        let newState = await recipeStore.get(this.id);
+        let recipeTags = allTags.filter(tag => newState.tags.includes(tag.id));
+        this.setState({
+            ...newState,
+            recipeTags: recipeTags,
+            suggestedTags: allTags
+        });
     }
 
     handleChange(event) {
@@ -30,6 +44,14 @@ export class EditRecipe extends Component {
         const name = target.name;
         this.setState({
             [name]: value
+        });
+    }
+
+    setTags(tags) {
+        this.setState({
+            ...this.state,
+            tags: tags.map(t => t.name),
+            recipeTags: tags
         });
     }
 
@@ -56,6 +78,7 @@ export class EditRecipe extends Component {
                         <form onSubmit={handleSubmit}>
                             <TitleInput title={this.state.title} handleChange={this.handleChange} />
                             <NumberOfServingsInput servings={this.state.servings} handleChange={this.handleChange} />
+                            <TagsInput tags={this.state.recipeTags} suggestions={this.state.suggestedTags} handleChange={this.setTags} />
                             <DescriptionInput description={this.state.description} handleChange={this.handleChange} />
                             <InstructionsInput instructions={this.state.instructions} handleChange={this.handleChange} />
                             <IngredientsInput ingredients={this.state.ingredients} handleChange={this.handleChange} />

@@ -1,10 +1,5 @@
-﻿import Axios from "axios";
-import { Subject } from "rxjs";
-import { HubConnectionBuilder } from "@microsoft/signalr";
-
-const api = Axios.create({
-    baseURL: process.env.REACT_APP_API_URL
-});
+﻿import { Subject } from "rxjs";
+import { api, signalRHub } from "./api";
 
 export const getRecipes = async () => {
     const resp = await api.get("recipes");
@@ -78,20 +73,15 @@ export const recipeStore = {
     }
 };
 
-const hub = new HubConnectionBuilder()
-    .withUrl(process.env.REACT_APP_API_URL + "recipeHub")
-    .withAutomaticReconnect()
-    .build();
-
-hub.on("RecipeCreated", function (r) {
+signalRHub.on("RecipeCreated", function (r) {
     recipeStore.appendRecipe(r);
 });
 
-hub.on("RecipeUpdated", function (r) {
+signalRHub.on("RecipeUpdated", function (r) {
     recipeStore.updateRecipe(r);
 });
 
-hub.start().then(function () {
+signalRHub.start().then(function () {
     //document.getElementById("sendButton").disabled = false;
 }).catch(function (err) {
     return console.error(err.toString());

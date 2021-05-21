@@ -28,7 +28,7 @@ namespace CookBook.Domain.Recipes.Commands
         public async Task<(Stream, string)> Handle(GetPrimaryRecipeImageQuery request, CancellationToken cancellationToken)
         {
             using var session = this.documentStore.OpenAsyncSession();
-            var recipe = await session.LoadAsync<Recipe>(Aggregate.GetDocumentID<Recipe>(request.RecipeID));
+            var recipe = await session.LoadAsync<Recipe>(IdentityExtensions.GetDocumentID<Recipe>(request.RecipeID));
             if (!recipe.PictureFileNames.Any())
                 return (Stream.Null, null);
 

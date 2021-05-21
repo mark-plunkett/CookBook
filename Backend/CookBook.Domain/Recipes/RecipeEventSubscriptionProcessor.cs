@@ -90,7 +90,7 @@ namespace CookBook.Domain.Recipes
             catch (ConnectionClosedException connClosedEx)
             {
                 this.logger.LogError($"Error processing event {e}: {connClosedEx}");
-                await Subscribe();
+                Subscribe();
             }
             catch (Exception ex)
             {

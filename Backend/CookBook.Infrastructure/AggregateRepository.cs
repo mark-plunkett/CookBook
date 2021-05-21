@@ -70,7 +70,7 @@ namespace CookBook.Infrastructure
         {
             return (IDomainEvent)JsonSerializer.Deserialize(
                 Encoding.UTF8.GetString(e.OriginalEvent.Data),
-                Type.GetType($"{Encoding.UTF8.GetString(e.OriginalEvent.Metadata)}, {typeof(T).Assembly.FullName}")!)!;
+                Type.GetType($"CookBook.Domain.Recipes.Events.{e.OriginalEvent.EventType}, {typeof(T).Assembly.FullName}")!)!;
         }
 
         private string GetStreamName<T>(T type, Guid aggregateId) where T : Aggregate, new() => $"{type.GetType().Name}-{aggregateId}";

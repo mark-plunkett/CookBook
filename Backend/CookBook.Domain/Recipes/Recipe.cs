@@ -22,6 +22,7 @@ namespace CookBook.Domain.Recipes
         public bool IsFavourite { get; private set; }
         public DateTime CreatedOn { get; private set; }
         public IEnumerable<string> PictureFileNames { get; private set; } = new List<string>();
+        public IEnumerable<string> Tags { get; private set; } = new List<string>();
 
         protected override void When(IDomainEvent @event)
         {
@@ -31,6 +32,8 @@ namespace CookBook.Domain.Recipes
                 case RecipeUpdated e: OnUpdated(e); break;
                 case RecipeFavourited e: OnFavourited(e); break;
                 case RecipePictureAttached e: OnPictureAttached(e); break;
+                case RecipeTagged e: OnRecipeTagged(e); break;
+                case RecipeUntagged e: OnRecipeUntagged(e); break;
             }
         }
 
@@ -103,6 +106,16 @@ namespace CookBook.Domain.Recipes
             base.Apply(new RecipePictureAttached(fileName));
         }
 
+        public void Tag(string canonicalized)
+        {
+            base.Apply(new RecipeTagged(canonicalized));
+        }
+
+        public void Untag(string canonicalized)
+        {
+            base.Apply(new RecipeUntagged(canonicalized));
+        }
+
         private void OnCreated(RecipeCreated e)
         {
             base.ID = e.RecipeID;
@@ -131,6 +144,20 @@ namespace CookBook.Domain.Recipes
         private void OnPictureAttached(RecipePictureAttached e)
         {
             (this.PictureFileNames as List<string>).Add(e.FileName);
+        }
+
+        private void OnRecipeTagged(RecipeTagged e)
+        {
+            var tags = this.Tags as List<string>;
+            if (!tags.Contains(e.CanonicalizedTag))
+                tags.Add(e.CanonicalizedTag);
+        }
+
+        private void OnRecipeUntagged(RecipeUntagged e)
+        {
+            var tags = this.Tags as List<string>;
+            if (tags.Contains(e.CanonicalizedTag))
+                tags.Remove(e.CanonicalizedTag);
         }
     }
 }

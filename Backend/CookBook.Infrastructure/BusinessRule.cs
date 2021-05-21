@@ -1,3 +1,5 @@
+using System.Linq;
+
 namespace CookBook.Infrastructure
 {
     public abstract class BusinessRule
@@ -6,6 +8,15 @@ namespace CookBook.Infrastructure
         {
             if (rule.IsViolated)
                 throw new BusinessRuleException(new BusinessError(propertyName, rule.Message));
+        }
+
+        public static void EnforceAll(params IBusinessRule[] rules)
+        {
+            var violated = rules
+                .Where(rule => rule.IsViolated)
+                .ToList();
+            if (violated.Any())
+                throw new BusinessRuleException(violated.Select(rule => new BusinessError(rule.PropertyName, rule.Message)));
         }
 
         public static void Enforce(IBusinessRule rule)

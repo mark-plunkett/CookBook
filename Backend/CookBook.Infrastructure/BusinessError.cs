@@ -16,7 +16,7 @@ namespace CookBook.Infrastructure
             this.Message = message;
         }
 
-        public BusinessError(string propertyName, string message)
+        public BusinessError(string? propertyName, string message)
             : this(message)
         {
             this.PropertyName = propertyName;

@@ -4,5 +4,6 @@ namespace CookBook.Infrastructure
     {
         bool IsViolated { get; }
         string Message { get; }
+        string? PropertyName => string.Empty;
     }
 }
