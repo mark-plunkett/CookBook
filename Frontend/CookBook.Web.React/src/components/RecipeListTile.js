@@ -2,6 +2,7 @@ import React from 'react';
 import { Card, Element } from 'react-bulma-components';
 import { Link } from 'react-router-dom';
 import { FavHeart } from './FavHeart';
+import { TagList } from './TagList';
 
 export const RecipeListTile = (props) => {
     return (
@@ -19,6 +20,7 @@ export const RecipeListTile = (props) => {
                 <Element className="buttons is-right">
                     <FavHeart recipe={props.recipe} />
                 </Element>
+                <TagList tags={props.recipe.tags} allTags={props.allTags}></TagList>
             </Card.Content>
         </Card>
     );

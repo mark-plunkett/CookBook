@@ -5,8 +5,9 @@ import { recipeStore } from '../models/recipes';
 import { RecipeListTile } from './RecipeListTile';
 import Icon from 'react-bulma-components/lib/components/icon';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faPlus, faSearch, faSeedling } from '@fortawesome/free-solid-svg-icons'
+import { faPlus, faSearch } from '@fortawesome/free-solid-svg-icons'
 import _ from 'lodash';
+import { tagStore } from 'models/tags';
 
 const { Input, Field, Control } = Form;
 
@@ -27,7 +28,8 @@ export class Recipes extends Component {
             recipes: [],
             loading: true,
             orderBy: this.sortOptions.newest,
-            search: ''
+            search: '',
+            allTags: []
         };
         this.setState = this.setState.bind(this)
         this.handleChange = this.handleChange.bind(this);
@@ -35,10 +37,15 @@ export class Recipes extends Component {
     }
 
     async componentDidMount() {
+        const tags = await tagStore.map();
+        this.setState({
+            ...this.state,
+            allTags: tags
+        })
         this.recipeSubscription$ = recipeStore.subscribe(state => this.setState({
             ...state,
             loading: state.loading,
-            recipes: state.recipes
+            recipes: state.recipes,
         }));
         await recipeStore.init();
     }
@@ -73,7 +80,7 @@ export class Recipes extends Component {
             <Columns className="mt-0 pt-5">
                 {sorted.map(recipe =>
                     <Columns.Column key={recipe.id} size={3}>
-                        <RecipeListTile key={recipe.id} recipe={recipe} />
+                        <RecipeListTile key={recipe.id} recipe={recipe} allTags={this.state.allTags}/>
                     </Columns.Column>
                 )}
             </Columns>

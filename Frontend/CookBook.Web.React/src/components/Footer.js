@@ -15,7 +15,7 @@ export const Footer = props => {
                 </Element>
             </Element>
             <Container className="my-5">
-                <Element className="has-text-right has-text-grey-light"><span>© CookBook {new Date().getFullYear()}</span></Element>
+                <Element className="has-text-right has-text-grey-light"><span>© Cookbook {new Date().getFullYear()}</span></Element>
             </Container>
         </Element>
     );

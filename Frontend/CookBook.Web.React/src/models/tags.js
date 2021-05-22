@@ -34,5 +34,15 @@ export const tagStore = {
     subscribe: setState => subject.subscribe(setState),
     list: async () => {
         return await fetchTags();
+    },
+    map: async () => {
+        const tags = await fetchTags();
+        const obj = {};
+        return tags.reduce((o, tag) => {
+            return {
+                ...o,
+                [tag.canonicalized]: tag
+            }
+        }, obj);
     }
 };
