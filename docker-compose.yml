@@ -34,6 +34,15 @@ services:
     volumes:
       - cookbook_ravendb-volume-data:/opt/RavenDB/Server/RavenData
       - cookbook_ravendb-volume-config:/opt/RavenDB/config
+  cookbook.api:
+    image: markplunkett/cookbook-backend:latest
+    ports:
+      - "5000:80"
+    depends_on: 
+      - "eventstore.db"
+      - "ravendb.db"
+    environment: 
+      WAIT_HOSTS: eventstore.db:1113, ravendb.db:8080
 
 volumes:
   cookbook_eventstore-volume-data:

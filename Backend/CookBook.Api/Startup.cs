@@ -102,7 +102,7 @@ namespace CookBook.Api
                 .SetHeartbeatTimeout(TimeSpan.FromSeconds(60))
                 .SetHeartbeatInterval(TimeSpan.FromSeconds(30));
             var connection = EventStoreConnection.Create(
-                "ConnectTo=tcp://admin:changeit@localhost:1113;UseSslConnection=false;",
+                this.Configuration.GetConnectionString("EventStore"),
                 connectionSettings);
             connection.ConnectAsync().GetAwaiter().GetResult();
             services.AddSingleton(connection);
@@ -125,7 +125,7 @@ namespace CookBook.Api
             {
                 Urls = new[]                        // URL to the Server,
                 {                                   // or list of URLs 
-                    "http://localhost:8080"  // to all Cluster Servers (Nodes)
+                    this.Configuration.GetConnectionString("RavenDB")
                 },
                 Database = "cookbook",             // Default database that DocumentStore will interact with
                 Conventions = { }                   // DocumentStore customizations
