@@ -3,6 +3,7 @@ version: '3.4'
 services:
   eventstore.db:
     image: eventstore/eventstore:latest
+    mem_limit: 512m
     environment:
       - EVENTSTORE_CLUSTER_SIZE=1
       - EVENTSTORE_RUN_PROJECTIONS=All
@@ -24,6 +25,7 @@ services:
         target: /var/log/eventstore
   ravendb.db:
     image: ravendb/ravendb:latest
+    mem_limit: 512m
     ports:
       - "8080:8080"
       - "38888:38888"
@@ -36,6 +38,7 @@ services:
       - cookbook_ravendb-volume-config:/opt/RavenDB/config
   cookbook.backend:
     image: markplunkett/cookbook-backend:latest
+    mem_limit: 512m
     ports:
       - "5000:80"
     depends_on: 
@@ -45,6 +48,7 @@ services:
       WAIT_HOSTS: eventstore.db:1113, ravendb.db:8080
   cookbook.frontend.react:
     image: markplunkett/cookbook-frontend-react:latest
+    mem_limit: 512m
     ports:
       - "3000:3000"
     depends_on: 
