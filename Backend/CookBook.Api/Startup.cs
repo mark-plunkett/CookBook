@@ -60,13 +60,6 @@ namespace CookBook.Api
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
-                app.UseCors(options =>
-                {
-                    options.WithOrigins("http://localhost:3000");
-                    options.AllowCredentials();
-                    options.AllowAnyMethod();
-                    options.AllowAnyHeader();
-                });
             }
             else
             {
@@ -74,6 +67,14 @@ namespace CookBook.Api
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
+
+            app.UseCors(options =>
+            {
+                options.WithOrigins("http://localhost:3000");
+                options.AllowCredentials();
+                options.AllowAnyMethod();
+                options.AllowAnyHeader();
+            });
 
             app.UseProblemDetails();
 
